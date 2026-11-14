@@ -71,7 +71,7 @@ const origAdd=G.addColorStop;G.addColorStop=function(o,c){const r=hz(c);if(isBlo
 html,body{margin:0;height:100%;background:var(--bg);color:var(--cream);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
 html{overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:none}
 body{height:auto;min-height:100%;background:linear-gradient(var(--g1),var(--bg) 72%) 0 0/100% 100vh no-repeat var(--bg);background:linear-gradient(var(--g1),var(--bg) 72%) 0 0/100% 100svh no-repeat var(--bg);overscroll-behavior-y:none}
-html.introlock,html.greet-open{overflow:hidden}
+html.introlock,html.greet-open,html.ov-open{overflow:hidden}
 button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -358,6 +358,108 @@ body.horror [data-item="sauce:blood"] .emoji,body.horror [data-flavor=blood] .em
  .setbtn.melbtn{left:calc(max(0px,(100% - 1640px)/2) + 110px)}
  .setpanel{left:calc(max(0px,(100% - 1640px)/2) + 62px);top:108px}
 }
+
+/* Кнопка фото (справа вверху сцены) и подсказка «?» (только для устройств с мышью) */
+.stage>.setbtn.camb{left:auto;right:10px;top:10px;z-index:5;width:38px;height:38px;padding:0;font-size:1.05rem;border-radius:50%;border:1px solid var(--line);background:var(--panelA);display:flex;align-items:center;justify-content:center}
+.stage>.setbtn.camb:active{transform:scale(.94)}
+.keyhint{position:absolute;right:12px;bottom:12px;z-index:5;width:30px;height:30px;padding:0;border-radius:50%;border:1px solid var(--line);background:var(--panelA);color:var(--muted);font-weight:900;font-size:.9rem;display:none;align-items:center;justify-content:center}
+@media (hover:hover) and (pointer:fine){.keyhint{display:flex}}
+body.horror .stage>.setbtn.camb,body.horror .keyhint{filter:grayscale(1) contrast(1.1)}
+/* Окна фото и горячих клавиш */
+.hmodal{position:fixed;inset:0;z-index:970;display:grid;place-items:center;padding:14px;background:#000b;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.hmodal[hidden]{display:none!important}
+.hbox{width:min(440px,100%);max-height:calc(100dvh - 28px);overflow-y:auto;-webkit-overflow-scrolling:touch;border-radius:22px;border:1px solid var(--bd);background:var(--panel);padding:16px;display:flex;flex-direction:column;gap:12px;color:var(--cream)}
+.hbox h2{margin:0;font-size:1.05rem}
+#photoPrev{width:100%;height:auto;aspect-ratio:1/1;border-radius:14px;background:#0005;display:block}
+.phchips{display:flex;flex-wrap:wrap;gap:6px}
+.phchips button{padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:#ffffff0d;color:var(--catc);font-weight:800;font-size:.78rem}
+.phchips button[aria-pressed=true]{background:var(--acbg);border-color:var(--bd);color:var(--cream)}
+.phmsg{margin:0;min-height:1.2em;font-size:.84rem;color:var(--muted)}
+.phbtns{display:flex;gap:8px}
+.hbox>button,.phbtns button{flex:1;padding:12px 8px;border-radius:14px;border:1px solid var(--line);background:#ffffff10;color:var(--cream);font-weight:800;font-size:.84rem}
+.phbtns #photoSave{background:var(--red);border-color:transparent;color:#fff}
+.keyslist{margin:0;display:grid;gap:9px}
+.keyslist>div{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center}
+.keyslist dt{white-space:nowrap}
+.keyslist dd{margin:0;color:var(--muted);font-size:.9rem}
+kbd{display:inline-block;min-width:1.8em;padding:2px 7px;border-radius:7px;border:1px solid var(--line);background:#ffffff12;font:800 .8rem/1.5 system-ui,-apple-system,sans-serif;text-align:center}
+
+.kbtn{flex:none;display:inline-flex;align-items:center;gap:4px;padding:8px 11px;border-radius:999px;border:1px solid var(--line);background:var(--panelA);color:var(--cream);font-size:.74rem;font-weight:800;white-space:nowrap}
+@media (min-width:900px) and (min-height:521px){.kbtn{padding:11px 16px;font-size:.84rem}}
+body.horror .kbtn{filter:grayscale(1) contrast(1.1)}
+/* ---------- Кухня: отдельная сцена для готовки ---------- */
+.kitchen{position:fixed;inset:0;z-index:960;background:#140b11;opacity:1;transition:opacity .5s ease;touch-action:none;overscroll-behavior:contain;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+.kitchen[hidden]{display:none!important}
+.kitchen.out{opacity:0;pointer-events:none}
+.kitchen.in{animation:kIn .45s ease both}
+@keyframes kIn{from{opacity:0;transform:scale(1.03)}to{opacity:1;transform:none}}
+#kCv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.khud{position:absolute;inset:0;pointer-events:none;display:flex;flex-direction:column;padding:max(8px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left))}
+.khud button{pointer-events:auto;font-family:inherit}
+.ktop{display:flex;align-items:center;gap:10px;min-height:46px}
+.kx{flex:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--panelA);color:var(--cream);font-size:1.05rem;font-weight:800;line-height:1}
+.ktitle{display:flex;flex-direction:column;min-width:0;flex:1;text-shadow:0 2px 8px #000a}
+.ktitle b{font-size:1.02rem;color:var(--cream);line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ktitle small{color:var(--catc);font-size:.74rem;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kdots{display:flex;gap:5px;list-style:none;margin:0;padding:0;flex:none}
+.kdots li{width:9px;height:9px;border-radius:50%;background:#ffffff30;transition:background .2s,box-shadow .2s}
+.kdots li.on{background:var(--red);box-shadow:0 0 9px var(--red)}
+.kdots li.done{background:var(--cream)}
+.kbubble{align-self:flex-start;display:flex;gap:9px;align-items:flex-start;margin:10px 0 0 2px;max-width:min(540px,94%);padding:9px 14px 10px 10px;border-radius:20px 20px 20px 6px;background:#fff8f3;color:#2b1520;font-weight:700;font-size:.9rem;line-height:1.35;box-shadow:0 8px 22px #0007;pointer-events:none;transform-origin:left top}
+.kbubble.pop{animation:kPop .28s cubic-bezier(.3,1.6,.5,1) both}
+.kbubble.bad{background:#ffe3e3;color:#6b0f1f}
+.kbubble.good{background:#e9ffe9;color:#12401f}
+.kbubble[hidden]{display:none}
+@keyframes kPop{from{opacity:0;transform:scale(.86) translateY(-6px)}to{opacity:1;transform:none}}
+.kbav{flex:none;width:34px;height:34px;border-radius:50%;background:linear-gradient(145deg,#ffd1dc,#ff9fb7);display:grid;place-items:center;font-size:1.15rem;box-shadow:inset 0 -2px 0 #0002}
+.kdock{margin-top:auto;display:flex;gap:10px;justify-content:center;align-items:stretch;flex-wrap:wrap;padding-top:8px;min-height:60px}
+.kb{flex:1 1 0;min-width:118px;max-width:260px;padding:15px 14px;border-radius:18px;border:1px solid var(--bd);background:var(--panelA);color:var(--cream);font-weight:900;font-size:.95rem;line-height:1.1;box-shadow:0 8px 20px #0006;touch-action:manipulation}
+.kb.pri{background:linear-gradient(100deg,var(--red),var(--red2));border:0;color:#fff;box-shadow:0 10px 24px #fb365d55}
+.kb:disabled{opacity:.42;box-shadow:none}
+.kb.hold{touch-action:none}
+.kb.kdown{transform:scale(.97);filter:brightness(1.15)}
+.kb.sm{flex:0 0 auto;min-width:64px;max-width:90px;padding:15px 12px}
+.kchips{display:flex;gap:8px;justify-content:center;width:100%}
+.kchip{flex:1 1 0;min-width:0;max-width:78px;aspect-ratio:1;border-radius:50%;border:3px solid #ffffff40;font-size:1.35rem;display:grid;place-items:center;box-shadow:0 6px 14px #0006;padding:0}
+.kchip[aria-pressed=true]{border-color:#fff;transform:scale(1.08);box-shadow:0 0 0 3px var(--red),0 6px 14px #0006}
+.kchip:disabled{opacity:.5}
+.kpick{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:130px 14px 24px;pointer-events:none}
+.kpick[hidden]{display:none}
+.kpick>*{pointer-events:auto}
+.kcards{display:flex;gap:10px;width:min(560px,100%)}
+.kcard{flex:1 1 0;display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 4px 12px;border-radius:20px;border:1px solid var(--line);background:#1b0f16ea;color:var(--cream);font-family:inherit;box-shadow:0 10px 26px #0007}
+.kcard canvas.kcake{width:92%;max-width:132px;aspect-ratio:1/1;height:auto;display:block}
+.kcard b{font-size:1rem}
+.kcard small{color:var(--catc);font-size:.74rem;font-weight:700}
+.kcard[aria-pressed=true]{border-color:var(--red);background:var(--acbg);box-shadow:0 0 0 2px var(--red) inset,0 10px 26px #0007}
+.kgo{min-width:220px;padding:16px 22px;border-radius:18px;border:0;background:linear-gradient(100deg,var(--red),var(--red2));color:#fff;font-weight:900;font-size:1rem;box-shadow:0 10px 24px #fb365d55;font-family:inherit}
+.kgo:disabled{opacity:.45;box-shadow:none}
+@media (min-width:900px) and (min-height:560px){.kb{padding:17px 18px;font-size:1.02rem}.kbubble{font-size:.98rem}.kx{width:48px;height:48px}}
+@media (max-width:360px){.kbubble{font-size:.8rem;gap:7px;padding:7px 12px 8px 8px}.kbav{width:28px;height:28px;font-size:1rem}}
+@media (prefers-reduced-motion:reduce){.kitchen.in{animation:none}.kbubble.pop{animation:none}}
+.king{position:absolute;background:transparent;border:0;padding:0;margin:0;border-radius:14px;pointer-events:auto;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.king[hidden]{display:none}
+.king:focus-visible{outline:3px solid var(--red);outline-offset:-3px}
+.kb:focus-visible,.kchip:focus-visible,.kcard:focus-visible,.kx:focus-visible,.kgo:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.kb.pulse:not(:disabled){animation:kPulse 1.1s ease-in-out infinite}
+@keyframes kPulse{50%{transform:scale(1.035);box-shadow:0 12px 30px #fb365d99}}
+@media (prefers-reduced-motion:reduce){.kb.pulse:not(:disabled){animation:none}}
+/* низкий широкий экран (телефон на боку): облачко в шапке, всё компактнее */
+.kitchen.kcompact .ktop{min-height:40px}
+.kitchen.kcompact .kx{width:38px;height:38px;font-size:.95rem}
+.kitchen.kcompact .kbubble{position:absolute;top:max(8px,env(safe-area-inset-top));left:calc(max(10px,env(safe-area-inset-left)) + 188px);right:calc(max(10px,env(safe-area-inset-right)) + 92px);margin:0;max-width:none;align-self:auto;font-size:.82rem;line-height:1.3;padding:6px 12px 7px 8px;border-radius:16px 16px 16px 5px}
+.kitchen.kcompact .kbav{width:26px;height:26px;font-size:1rem}
+.kitchen.kcompact .kdock{min-height:48px;padding-top:4px;gap:8px}
+.kitchen.kcompact .kb{padding:10px 12px;font-size:.88rem;min-width:104px}
+.kitchen.kcompact .kb.sm{padding:10px;min-width:56px}
+.kitchen.kcompact .kchips{gap:6px}
+.kitchen.kcompact .kchip{max-width:44px;border-width:2px;font-size:1.05rem}
+.kitchen.kcompact .kpick{flex-direction:row;flex-wrap:wrap;align-content:center;gap:10px 18px;padding:56px 14px 8px}
+.kitchen.kcompact .kcards{width:min(500px,62%)}
+.kitchen.kcompact .kcard{padding:8px 4px}
+.kitchen.kcompact .kcard canvas.kcake{max-width:84px}
+.kitchen.kcompact .kgo{min-width:150px;padding:13px 16px}
+
 </style>
 </head>
 <body>
@@ -392,14 +494,75 @@ body.horror [data-item="sauce:blood"] .emoji,body.horror [data-flavor=blood] .em
     <div class="melonbtns"><button id="melonCancel" type="button">Отмена</button><button id="melonDone" type="button" disabled>Готово</button></div>
   </div>
 </div>
+<div class="hmodal" id="photoOv" hidden>
+ <div class="hbox" role="dialog" aria-modal="true" aria-labelledby="photoTitle">
+  <h2 id="photoTitle">Фото торта</h2>
+  <canvas id="photoPrev" aria-label="Предпросмотр фото торта"></canvas>
+  <div class="phchips" id="photoChips" role="group" aria-label="Обработка фото">
+   <button type="button" data-f="none" aria-pressed="true">Как есть</button>
+   <button type="button" data-f="auto" aria-pressed="false">Авто</button>
+   <button type="button" data-f="warm" aria-pressed="false">Тёплое</button>
+   <button type="button" data-f="cool" aria-pressed="false">Холодное</button>
+   <button type="button" data-f="bw" aria-pressed="false">Ч/Б</button>
+  </div>
+  <p class="phmsg" id="photoMsg" aria-live="polite"></p>
+  <div class="phbtns"><button type="button" id="photoSave">Сохранить</button><button type="button" id="photoShare" hidden>Поделиться</button><button type="button" id="photoClose">Закрыть</button></div>
+ </div>
+</div>
+<div class="hmodal" id="keysOv" hidden>
+ <div class="hbox" role="dialog" aria-modal="true" aria-labelledby="keysTitle">
+  <h2 id="keysTitle">Горячие клавиши</h2>
+  <dl class="keyslist">
+   <div><dt><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd></dt><dd>нож, зажигалка, ластик</dd></div>
+   <div><dt><kbd>4</kbd>–<kbd>9</kbd></dt><dd>огоньки, декор, ягоды, соусы, пальцы, вкус</dd></div>
+   <div><dt><kbd>B</kbd></dt><dd>испечь корж</dd></div>
+   <div><dt><kbd>F</kbd></dt><dd>сфотографировать торт</dd></div>
+   <div><dt><kbd>M</kbd></dt><dd>мелодия вкл. и выкл.</dd></div>
+   <div><dt><kbd>S</kbd></dt><dd>звуки вкл. и выкл.</dd></div>
+   <div><dt><kbd>?</kbd></dt><dd>эта подсказка</dd></div>
+   <div><dt><kbd>Esc</kbd></dt><dd>закрыть окно</dd></div>
+  </dl>
+  <button type="button" id="keysClose">Закрыть</button>
+ </div>
+</div>
+<div class="kitchen" id="kitchen" hidden role="dialog" aria-modal="true" aria-label="Кухня">
+ <canvas id="kCv"></canvas>
+ <div class="khud">
+  <header class="ktop">
+   <button type="button" class="kx" id="kClose" aria-label="Закрыть кухню">✕</button>
+   <div class="ktitle"><b id="kTitle">Кухня</b><small id="kSub"></small></div>
+   <ol class="kdots" id="kDots" aria-hidden="true"></ol>
+  </header>
+  <div class="kbubble" id="kBubble" aria-live="polite" hidden><span class="kbav" aria-hidden="true">👩‍🍳</span><span id="kSay"></span></div>
+  <div class="kdock" id="kDock"></div>
+ </div>
+ <div class="kpick" id="kPick" hidden>
+  <div class="kcards" role="group" aria-label="Сколько ярусов">
+   <button type="button" class="kcard" data-n="1" aria-pressed="false">
+    <canvas class="kcake" aria-hidden="true"></canvas>
+    <b>1 ярус</b><small>быстро</small></button>
+   <button type="button" class="kcard" data-n="2" aria-pressed="false">
+    <canvas class="kcake" aria-hidden="true"></canvas>
+    <b>2 яруса</b><small>средне</small></button>
+   <button type="button" class="kcard" data-n="3" aria-pressed="false">
+    <canvas class="kcake" aria-hidden="true"></canvas>
+    <b>3 яруса</b><small>долго</small></button>
+  </div>
+  <button type="button" class="kgo" id="kGo" disabled>Начать готовить</button>
+ </div>
+</div>
+
 <main class="app">
   <h1 class="sr">Интерактивный торт</h1>
   <header class="topbar">
     <div class="brand" aria-hidden="true"><span class="bmark">🎂</span><span class="btxt"><b>Торт</b><small>украшай · режь · загадывай желание</small></span></div>
+    <button class="kbtn" id="bakeBtn" type="button" aria-label="Испечь корж" aria-haspopup="dialog">🥣<span> Испечь</span></button>
     <button class="newbtn" id="newCake" aria-label="Новый пустой торт">↻<span> Новый торт</span></button>
   </header>
   <section class="stage">
     <canvas id="cakeCanvas" aria-label="Интерактивный торт. Перетаскивай для вращения, украшай и режь."></canvas>
+    <button class="setbtn camb" id="camBtn" type="button" aria-label="Сфотографировать торт" aria-haspopup="dialog">📷</button>
+    <button class="keyhint" id="keyHint" type="button" aria-label="Горячие клавиши" aria-haspopup="dialog">?</button>
   </section>
   <nav class="toolbar" aria-label="Инструменты">
     <button class="tool" data-mode="knife"><span class="icon">🔪</span>Нож</button>
@@ -512,7 +675,7 @@ const LOOSE_SPAN=.9;                   // a leftover arc narrower than this leav
 const LAST_SPAN=1.5;                   // the only remaining arc at most this wide is the "last piece" and is detached automatically
 const CENTER_TOL=.62,EDGE_TOL=.2,STRAIGHT=.68,SNAP_EDGE=.2,NUDGE=.09; // EDGE_TOL: rim margin (cake radii); STRAIGHT: min displacement/path length; SNAP_EDGE: reach to an existing cut face when finishing a pending cut                  // a cut must start this close to the centre (in cake radii)...
 const AIM_MIN=.35,AIM_COS=.8;           // ...and a stroke that is clearly aimed outward from here on is extended to the rim
-const state={mode:'rotate',item:null,tab:null,rotation:0,items:[],cuts:[],holes:[],slices:[],eaten:0,flavor:'cherry',custom:{h:340,s:55,l:52},drag:null,W:0,H:0,dpr:1};
+const state={mode:'rotate',item:null,tab:null,rotation:0,items:[],cuts:[],holes:[],slices:[],eaten:0,flavor:'cherry',custom:{h:340,s:55,l:52},tiers:1,drag:null,W:0,H:0,dpr:1};
 function pick(a){return a[Math.floor(Math.random()*a.length)]}
 /* Фон за тортом и подставка нарисованы вишнёвой палитрой; для остальных цветовых тем (data-ui) её оттенок и насыщенность
    сдвигаются так же, как у фона интерфейса. В тёмной (страшной) теме палитра остаётся прежней: её обесцвечивает head-скрипт. */
@@ -636,9 +799,21 @@ function buildCustom(){
  FLAVORS.custom={side:[c(-34),c(-16),c(-8),c(-20),c(-38)],cream:[c(-12),c(26),c(32),c(14),c(-18)],band:c(-30),outline:c(-36),glaze:[c(14),c(2),c(-10),c(-22)],spongeA:c(18,-6),spongeB:c(26,-6),frost:c(-4),seam:c(-30),ring:[c(30)+'6f',c(-34)+'3c']};
 }
 buildCustom();
+/* ---------- Tiers ----------
+   A tier is the same cylinder, smaller and standing on the top plane of the tier below it. TIER_SHAPE gives the radius and
+   height of every tier in units of the bottom radius (k scales the whole stack to fit, dy moves it down); with one tier the
+   numbers are exactly those of the classic single cake. geom() describes the bottom tier and g.tr[k] every tier (g.tr[0]===g). */
+const TIER_SHAPE={1:{r:[1],h:[.38],k:1,dy:0},2:{r:[1,.67],h:[.34,.31],k:1,dy:.03},3:{r:[1,.72,.5],h:[.31,.29,.27],k:1,dy:.055}};
+let geomKey='',geomVal=null;
 function geom(){
- const R=Math.min(state.W*.315,state.H*.305,Math.max(184,Math.min(300,state.H*.36)));
- return {W:state.W,H:state.H,R,sy:.64,Hside:R*.38,cx:state.W*.5,cy:state.H*.425};
+  const n=TIER_SHAPE[state.tiers]?state.tiers:1,key=state.W+'|'+state.H+'|'+n;
+  if(geomVal&&key===geomKey)return geomVal;
+  const L=TIER_SHAPE[n],R=Math.min(state.W*.315,state.H*.305,Math.max(184,Math.min(300,state.H*.36)))*L.k;
+  const g={W:state.W,H:state.H,R,sy:.64,Hside:R*L.h[0],cx:state.W*.5,cy:state.H*(.425+L.dy),n,tr:null,k:0,lift:0,lt:0,stackH:0};
+  const tr=[g];let cy=g.cy,lift=0;
+  for(let k=1;k<n;k++){const hk=R*L.h[k];cy-=hk;lift+=hk;tr.push({W:g.W,H:g.H,R:R*L.r[k],sy:.64,Hside:hk,cx:g.cx,cy,n,tr,k,lift,lt:0,stackH:0})}
+  g.tr=tr;g.lt=lift;g.stackH=g.Hside+lift;for(const t of tr){t.lt=lift;t.stackH=g.stackH}
+  geomKey=key;return geomVal=g;
 }
 
 /* ---------- Render scheduling ----------
@@ -708,9 +883,9 @@ function wallBand(R,sy,H,t0,t1,f1,f2,fill){
 }
 // Curved outer wall (frosted side + cream layer) for a range of the cake or for a slice.
 function drawWall(R,sy,H,A,span,outline){
- let W=gc.wall;
+ const wk='w'+R.toFixed(1);let W=gc[wk];
  if(!W||W.R!==R||W.fk!==fkey()){const F=FL(),side=ctx.createLinearGradient(-R,0,R,0);[0,.17,.43,.66,1].forEach((o,i)=>side.addColorStop(o,F.side[i]));
-  const cream=ctx.createLinearGradient(-R,0,R,0);[0,.25,.55,.8,1].forEach((o,i)=>cream.addColorStop(o,F.cream[i]));W=gc.wall={R,side,cream,fk:fkey()}}
+  const cream=ctx.createLinearGradient(-R,0,R,0);[0,.25,.55,.8,1].forEach((o,i)=>cream.addColorStop(o,F.cream[i]));W=gc[wk]={R,side,cream,fk:fkey()}}
  const side=W.side,cream=W.cream;
  for(const [t0,t1] of frontRanges(A,span)){
   wallBand(R,sy,H,t0,t1,0,1,side);wallBand(R,sy,H,t0,t1,.42,.60,cream);wallBand(R,sy,H,t0,t1,.60,.64,FL().band);
@@ -753,9 +928,9 @@ function swirlSprite(g){
 }
 function drawTopTexture(g){
  const {R,sy}=g;
- let T=gc.top;
+ const tk='t'+R.toFixed(1);let T=gc[tk];
  if(!T||T.R!==R||T.fk!==fkey()){const glaze=ctx.createRadialGradient(-R*.25,-R*sy*.36,R*.02,R*.05,R*.03,R*1.18);[0,.34,.72,1].forEach((o,i)=>glaze.addColorStop(o,FL().glaze[i]));
-  const gloss=ctx.createRadialGradient(-R*.3,-R*sy*.34,1,-R*.18,-R*sy*.22,R*.83);gloss.addColorStop(0,'#f2b5ad32');gloss.addColorStop(.72,'#ed91a000');gloss.addColorStop(1,'#170b162f');T=gc.top={R,glaze,gloss,fk:fkey()}}
+  const gloss=ctx.createRadialGradient(-R*.3,-R*sy*.34,1,-R*.18,-R*sy*.22,R*.83);gloss.addColorStop(0,'#f2b5ad32');gloss.addColorStop(.72,'#ed91a000');gloss.addColorStop(1,'#170b162f');T=gc[tk]={R,glaze,gloss,fk:fkey()}}
  ell(0,0,R,R*sy);ctx.fillStyle=T.glaze;ctx.fill();
  ctx.save();ctx.beginPath();ctx.ellipse(0,0,R*.94,R*sy*.94,0,0,TAU);ctx.clip();
  ctx.fillStyle=T.gloss;ctx.fillRect(-R,-R*sy,R*2,R*sy*2);
@@ -796,6 +971,61 @@ function drawSolid(g,ox,oy,A,span,slice,ed){
  ctx.save();wedgePath(R*1.02,R*sy*1.02,A-xa,span+xa+xb);ctx.clip();drawTopTexture(g);ctx.restore();
  if(!full){ctx.beginPath();if(ea){ctx.moveTo(R*Math.cos(A),R*sy*Math.sin(A));ctx.lineTo(0,0)}else ctx.moveTo(0,0);if(eb)ctx.lineTo(R*Math.cos(B),R*sy*Math.sin(B));ctx.strokeStyle=FL().seam;ctx.lineWidth=1;ctx.stroke()}
  ctx.restore();
+}
+
+/* ---------- Tiered cake: one wedge of the whole stack ----------
+   A wedge (a piece of the remaining cake or a detached slice) is the same angular range in every tier, so it is painted tier by
+   tier from the bottom up. Decorations of a tier that stand behind the middle of the plane are painted before the tier above
+   (which then hides them); the ones in front are painted last, ordered by depth. */
+function drawSeat(gk,gp,ox,oy,A,span,ed){ // soft contact shadow of tier gk on the top of the tier below it (gp)
+  const ea=!ed||ed.a,eb=!ed||ed.b,xa=ea?0:.012,xb=eb?0:.012;
+  ctx.save();ctx.translate(gp.cx+ox,gp.cy+oy);
+  wedgePath(gp.R*.995,gp.R*gp.sy*.995,A-xa,span+xa+xb);ctx.clip();
+  ctx.scale(1,gp.sy);
+  const gr=ctx.createRadialGradient(0,0,gk.R*.97,0,0,gk.R*1.17);gr.addColorStop(0,'rgba(22,6,12,.5)');gr.addColorStop(1,'rgba(22,6,12,0)');
+  ctx.fillStyle=gr;ctx.beginPath();ctx.arc(0,0,gk.R*1.17,0,TAU);ctx.fill();
+  ctx.restore();
+}
+function hitShifts(g){ // vertical offsets (px) at which a tap is tested against the base plane: tops and walls of every tier
+  const a=[0,g.Hside*.5,g.Hside];
+  for(let k=1;k<g.n;k++){const t=g.tr[k];a.push(-t.lift,-t.lift+t.Hside*.5)}
+  return a;
+}
+function behindUpper(px,py,k,g,ox,oy){ // is a screen point inside the silhouette (top + wall) of a tier above tier k?
+  for(let j=k+1;j<g.n;j++){
+    const t=g.tr[j],dx=px-(t.cx+ox);if(Math.abs(dx)>=t.R)continue;
+    const ry=t.R*t.sy*Math.sqrt(1-dx*dx/(t.R*t.R)),y=py-(t.cy+oy);
+    if(y>-ry&&y<t.Hside+ry)return true;
+  }
+  return false;
+}
+function drawTierGuides(gk,wedge){ // pending cut lines (dashed) that fall on this wedge, painted on this tier's top
+  if(!state.cuts.length)return;
+  ctx.save();ctx.translate(gk.cx,gk.cy);
+  for(const a of state.cuts)if(normAngle(a-wedge.start)<=wedge.span+1e-3)guideLine(a,.985,gk);
+  ctx.restore();
+}
+function drawTierItems(gk,list,ox,oy,wedge,front){
+  syncRot();const back=[];
+  for(const item of list){
+   if(item.type==='sauce'){drawSauce(item,gk,ox,oy,wedge);continue}
+   const px=item.x*rc+item.z*rs,pz=-item.x*rs+item.z*rc,f=clamp(1+pz*.085,.88,1.1);
+   const o={item,x:gk.cx+ox+px*gk.R,y:gk.cy+oy+pz*gk.R*gk.sy,l:lvlOf(f),z:pz};
+   (pz<0?back:front).push(o);
+  }
+  back.sort((a,b)=>a.z-b.z);for(const o of back)drawSprite(o);
+}
+function drawStackFull(g,ox,oy,A,span,slice,ed,items,wedge,cake){
+  const n=g.n,by=[[],[],[]],front=[];
+  for(const it of items)by[Math.min(n-1,it.t|0)].push(it);
+  for(let k=0;k<n;k++){
+   const gk=g.tr[k];
+   if(k>0)drawSeat(gk,g.tr[k-1],ox,oy,A,span,ed);
+   drawSolid(gk,ox,oy,A,span,slice,ed);
+   if(by[k].length)drawTierItems(gk,by[k],ox,oy,wedge,front);
+   if(cake)drawTierGuides(gk,wedge);
+  }
+  front.sort((a,b)=>a.y-b.y);for(const o of front)drawSprite(o);
 }
 
 /* ---------- Decor sprites ----------
@@ -1019,7 +1249,7 @@ function flameSprite(){
  }));
 }
 function itemAng(it){return it._a!==undefined?it._a:(it._a=Math.atan2(it.z,it.x))}
-function itemScreen(item,g){const p=projectLocal(item.x,item.z);return{x:g.cx+p.x*g.R,y:g.cy+p.z*g.R*g.sy,size:g.R*.125*clamp(1+p.z*.085,.88,1.1),z:p.z}}
+function itemScreen(item,g){const gk=(g.tr&&g.tr[item.t|0])||g,p=projectLocal(item.x,item.z);return{x:gk.cx+p.x*gk.R,y:gk.cy+p.z*gk.R*gk.sy,size:g.R*.125*clamp(1+p.z*.085,.88,1.1),z:p.z}}
 function drawTextItem(o){
  const it=o.item,u=spriteBase*LVL[o.l],fs=Math.max(10,11*u),tx=it.txt||'';
  ctx.save();ctx.translate(o.x,o.y);ctx.scale(1,.64);ctx.rotate((it.rot||0)-rotKey);
@@ -1045,7 +1275,8 @@ function drawFlames(g){
  syncRot();const now=performance.now()*.01,fl=flameSprite(),d=state.dpr;
  ctx.save();ctx.globalCompositeOperation='screen';
  const one=(item,ox,oy)=>{
-  const px=item.x*rc+item.z*rs,pz=-item.x*rs+item.z*rc,u=g.R*.125*clamp(1+pz*.085,.88,1.1)/12,x=g.cx+ox+px*g.R,y=g.cy+oy+pz*g.R*g.sy,t=now+(item.id%23),a=Math.sin(t*.6)*.13,c=Math.cos(a)*d,s=Math.sin(a)*d;
+  const gk=(g.tr&&g.tr[item.t|0])||g,px=item.x*rc+item.z*rs,pz=-item.x*rs+item.z*rc,u=g.R*.125*clamp(1+pz*.085,.88,1.1)/12,x=gk.cx+ox+px*gk.R,y=gk.cy+oy+pz*gk.R*gk.sy,t=now+(item.id%23),a=Math.sin(t*.6)*.13,c=Math.cos(a)*d,s=Math.sin(a)*d;
+  if(g.n>1&&pz<0&&behindUpper(x,y-40*u,item.t|0,g,ox,oy))return;
   if(item.type==='sparkler'){window.__fire=true;try{drawSpark(x,y,u,d,item)}finally{window.__fire=false}return}
   if(blowLean>.02){ // пламя клонится от дуновения вокруг основания у фитиля
    const L=blowLean*.72,an=a+L+Math.sin(t*3.1)*.07*blowLean,ca=Math.cos(an)*d,sa=Math.sin(an)*d;
@@ -1155,7 +1386,7 @@ function sliceDepth(s){return Math.sin(s.start+s.span/2-state.rotation)}
 // reach: that is the invisible, enlarged tap area. The slice is also tested at the heights of its wall and cut face.
 function sliceHit(s,p,g,pad){
  const f=sliceFrame(s,g);let best=Infinity;
- for(const shift of [0,g.Hside*.5,g.Hside]){
+ for(const shift of hitShifts(g)){
   const dx=p.x-f.ox,dy=(p.y-f.oy-shift)/g.sy,r=Math.hypot(dx,dy),lim=g.R*1.06+pad;
   if(r>lim)continue;
   const tol=.05+(pad?Math.min(.6,pad/Math.max(r,g.R*.4)):0),ang=normAngle(Math.atan2(dy,dx)-f.A),ex=ang<=s.span?0:Math.min(ang-s.span,TAU-ang);
@@ -1167,8 +1398,8 @@ function sliceHit(s,p,g,pad){
 // hit exactly, the enlarged area picks the slice that is angularly closest, but never over the cake's own top, so
 // neighbouring parts are not stolen.
 function overCakeBody(p,g){ // is the finger on the standing part of the cake: its top or its front wall?
- for(const sh of [0,g.Hside*.5,g.Hside]){
-  const lp=localPoint(p.x,p.y-sh,g);if(lp.r<1&&!pointInHole(lp)&&(sh===0||lp.z>0))return true;
+ for(const gk of g.tr)for(const sh of [0,gk.Hside*.5,gk.Hside]){
+  const lp=localPoint(p.x,p.y-sh,gk);if(lp.r<1&&!pointInHole(lp)&&(sh===0||lp.z>0))return true;
  }
  return false;
 }
@@ -1257,8 +1488,8 @@ function drawCutGuides(g){
 // Live preview uses exactly the rule that is applied on release: when the stroke will be extended, the line is drawn to the rim.
 function drawLiveCut(g){
  const dk=state.drag&&state.drag.mode==='knife'&&state.drag.moved&&state.drag.curScreen?state.drag:null;if(!dk)return;
- const pv=resolveCut(dk,dk.curScreen,g);if(pv.reason==='far'||pv.reason==='none')return;
- ctx.save();ctx.setTransform(state.dpr,0,0,state.dpr,0,0);ctx.translate(g.cx,g.cy);guideLine(pv.angle,pv.ok?.985:pv.reach,g);ctx.restore();
+ const gk=g.tr[dk.tk|0]||g,pv=resolveCut(dk,dk.curScreen,gk);if(pv.reason==='far'||pv.reason==='none')return;
+ ctx.save();ctx.setTransform(state.dpr,0,0,state.dpr,0,0);ctx.translate(gk.cx,gk.cy);guideLine(pv.angle,pv.ok?.985:pv.reach,gk);ctx.restore();
 }
 function renderScene(){
  if(!state.W||!state.H)return;
@@ -1284,6 +1515,11 @@ function renderScene(){
  let lastCake=-1;const lastOfArc={},held={};ordered.forEach((o,i)=>{if(o.cake){lastCake=i;if(o.arc!==undefined)lastOfArc[o.arc]=i}});
  const drawCakeItems=(g,o)=>{const xa=o.ea===false?.026:0,xb=o.eb===false?.026:0;drawItems(g,o.items,0,0,{start:o.start-xa,span:o.span+xa+xb})};
  ordered.forEach((o,i)=>{
+  if(g.n>1){ // tiered cake: every wedge is a whole stack (tiers 0..n-1) with its own decorations
+    if(o.cake){const xa=o.ea===false?.026:0,xb=o.eb===false?.026:0;drawStackFull(g,0,0,normAngle(o.start-state.rotation),o.span,false,{a:o.ea!==false,b:o.eb!==false},o.items,{start:o.start-xa,span:o.span+xa+xb},true)}
+    else{const f=sliceFrame(o.s,g);drawStackFull(g,f.ox-g.cx,f.oy-g.cy,f.A,o.span,true,undefined,o.items,{start:o.start,span:o.span},false)}
+    return;
+   }
   if(o.cake){drawSolid(g,0,0,normAngle(o.start-state.rotation),o.span,false,{a:o.ea!==false,b:o.eb!==false});
    // Decor of every piece of one arc is painted only after the whole arc, so a piece nearer the viewer can't paint over a berry standing at the seam.
    if(o.arc===undefined){if(o.items.length)drawCakeItems(g,o)}
@@ -1291,7 +1527,7 @@ function renderScene(){
   else{const f=sliceFrame(o.s,g);drawSolid(g,f.ox-g.cx,f.oy-g.cy,f.A,o.span,true);if(o.items.length)drawItems(g,o.items,f.ox-g.cx,f.oy-g.cy,{start:o.start,span:o.span})}
   if(i===lastCake)drawCutGuides(g);
  });
- if(lastCake<0)drawCutGuides(g);
+ if(lastCake<0&&g.n===1)drawCutGuides(g);
  window.__noGlow=false;ctx=prev;
 }
 function compose(lit){
@@ -1302,6 +1538,14 @@ function compose(lit){
 }
 
 function localPoint(px,py,g){const dx=(px-g.cx)/g.R,dz=(py-g.cy)/(g.R*g.sy),c=Math.cos(state.rotation),s=Math.sin(state.rotation);const x=dx*c-dz*s,z=dx*s+dz*c;return{x,z,r:Math.hypot(x,z)}}
+// Which tier is under a screen point: the highest tier whose top or front wall is there (a hole lets the tap fall through).
+function pickTier(p,g){
+  for(let k=g.n-1;k>0;k--){
+   const t=g.tr[k];
+   for(const sh of [0,t.Hside*.5,t.Hside]){const lp=localPoint(p.x,p.y-sh,t);if(lp.r<1.02&&!pointInHole(lp)&&(sh===0||lp.z>0))return k}
+  }
+  return 0;
+}
 function eventPoint(e){const r=canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
 // Hit-testing happens in screen space. A candle gets a generous invisible zone that covers
 // the body, the flame and some margin; its drawn size is unchanged.
@@ -1313,19 +1557,19 @@ function findItem(p,g,lp,candlesOnly){
   if(item.type==='candle'||item.type==='sparkler'){
    const hw=Math.max(26,u*15),up=Math.max(90,u*60),dn=Math.max(18,u*9),dx=Math.abs(p.x-s.x),dy=p.y-s.y;
    if(dx<=hw&&dy>=-up&&dy<=dn)d=Math.hypot(dx,(dy+up*.4)*.5);
-  }else if(item.type==='sauce'){const dd=Math.hypot(lp.x-item.x,lp.z-item.z);if(dd<.25)d=dd*100}
+  }else if(item.type==='sauce'){const q=(item.t|0)?localPoint(p.x,p.y,(g.tr&&g.tr[item.t|0])||g):lp,dd=Math.hypot(q.x-item.x,q.z-item.z);if(dd<.25)d=dd*100}
   else{const dd=Math.hypot(p.x-s.x,p.y-s.y+u*4);if(dd<Math.max(22,u*16))d=dd}
   if(d!==null&&d<bd){best=item;bd=d}
  }
  return best;
 }
 let idSeq=0;
-function placeItems(type,p){if(type==='melon'&&melonSlices<=0){sfx.error();return}let sk='cherry';if(type.indexOf('sauce')===0){sk=type.split(':')[1]||'cherry';type='sauce'}const rad=Math.hypot(p.x,p.z);const maxR=type==='sauce'?.92:.86;if(rad>maxR){p={...p,x:p.x/rad*maxR,z:p.z/rad*maxR}}
+function placeItems(type,p,tk){if(type==='melon'&&melonSlices<=0){sfx.error();return}let sk='cherry';if(type.indexOf('sauce')===0){sk=type.split(':')[1]||'cherry';type='sauce'}const rad=Math.hypot(p.x,p.z);const maxR=type==='sauce'?.92:.86;if(rad>maxR){p={...p,x:p.x/rad*maxR,z:p.z/rad*maxR}}
  if(pointInHole(p)){sfx.error();return}
  if(type==='sauce'){
-  state.items.push({id:Date.now()+(idSeq++),type,x:p.x,z:p.z,r0:.19+Math.random()*.05,ph:[Math.random()*TAU,Math.random()*TAU,Math.random()*TAU],seed:Math.random()*1000,lit:false,sk});
+  state.items.push({id:Date.now()+(idSeq++),type,x:p.x,z:p.z,r0:.19+Math.random()*.05,ph:[Math.random()*TAU,Math.random()*TAU,Math.random()*TAU],seed:Math.random()*1000,lit:false,sk,t:tk||undefined});
  }else{
-  state.items.push({id:Math.floor(performance.now()*1000+Math.random()*1000)+(idSeq++),type,x:p.x,z:p.z,rot:type==='text'?state.rotation:(Math.random()-.5)*.5,lit:false,txt:type==='text'?state.textVal:undefined,mc:type==='macaron'?(lastMac=(lastMac+1+Math.floor(Math.random()*(MAC.length-1)))%MAC.length):undefined});
+  state.items.push({id:Math.floor(performance.now()*1000+Math.random()*1000)+(idSeq++),type,x:p.x,z:p.z,rot:type==='text'?state.rotation:(Math.random()-.5)*.5,lit:false,txt:type==='text'?state.textVal:undefined,mc:type==='macaron'?(lastMac=(lastMac+1+Math.floor(Math.random()*(MAC.length-1)))%MAC.length):undefined,t:tk||undefined});
   if(type==='melon'){melonSlices--;updateMelonUI()}
  }
  if(type==='sauce')sfx.drizzle();else sfx.place();touchItems();updateStats();render();
@@ -1428,13 +1672,13 @@ function onDown(e){
  if(state.mode==='lighter'&&(gullAt(p)||crowAt(p))){state.drag={...base,mode:'tap',action:'lighter'};return}
  const hs=sliceAt(p,g);
  if(hs){state.drag={...base,mode:'tap',action:'eat',slice:hs};return}
- const lp=localPoint(p.x,p.y,g),m=state.mode;
+ const m=state.mode,tk=m==='knife'&&g.n>1?pickTier(p,g):0,lp=localPoint(p.x,p.y,g.tr[tk]);
  if(m==='knife'){
   if(lp.r>1.08){state.drag={...base,mode:'rotate'};return}
   if(cakeGone()){return}
   // Near the apex the angle is meaningless, so the "already cut" test only applies away from the centre.
   if(lp.r>CENTER_TOL&&pointInHole(lp)){return}
-  state.drag={...base,mode:'knife',start:lp,peak:lp,len:0,curScreen:p};renderOverlay();return;
+  state.drag={...base,mode:'knife',start:lp,peak:lp,len:0,curScreen:p,tk};renderOverlay();return;
  }
  // Tap performs the tool action, a drag turns the cake instead.
  state.drag={...base,mode:'tap',action:m};
@@ -1442,7 +1686,7 @@ function onDown(e){
 function onMove(e){
  const d=state.drag;if(!d)return;e.preventDefault();const p=eventPoint(e),g=geom();
  const dist=Math.hypot(p.x-d.startScreen.x,p.y-d.startScreen.y);
- if(d.mode==='knife'){d.len+=Math.hypot(p.x-d.last.x,p.y-d.last.y);d.last=p;d.curScreen=p;const q=localPoint(p.x,p.y,g);if(q.r>d.peak.r)d.peak=q;if(dist>6)d.moved=true;renderOverlay();return}
+ if(d.mode==='knife'){d.len+=Math.hypot(p.x-d.last.x,p.y-d.last.y);d.last=p;d.curScreen=p;const q=localPoint(p.x,p.y,g.tr[d.tk|0]||g);if(q.r>d.peak.r)d.peak=q;if(dist>6)d.moved=true;renderOverlay();return}
  if(d.mode==='tap'){if(dist<=6)return;d.mode='rotate';d.moved=true}
  if(d.mode==='rotate'){if(dist>3)d.moved=true;state.rotation+=(p.x-d.last.x)*.013;d._sp=(d._sp||0)+Math.abs(p.x-d.last.x)*.013;if(d._sp>.4){d._sp=0;sfx.spin()}d.last=p;render()}
 }
@@ -1450,9 +1694,10 @@ function tapAction(action,p,g){
  const lp=localPoint(p.x,p.y,g);
  if(action==='rotate'){return}
  if(action==='place'){
-  if(lp.r>1.06){return}
+  const tk=g.n>1?pickTier(p,g):0,q=tk?localPoint(p.x,p.y,g.tr[tk]):lp;
+  if(q.r>1.06){return}
   if(!state.item){return}
-  placeItems(state.item,lp);return;
+  placeItems(state.item,q,tk);return;
  }
  if(action==='chop'){if(crowAt(p)){crowScream();return}const gc2=gullAt(p);if(gc2)chopGull(gc2);return}
  if(action==='lighter'){const gb=gullAt(p);if(gb){burnGull(gb);return}if(crowAt(p)){burnCrow();return}}
@@ -1466,7 +1711,7 @@ function onUp(e){
  const d=state.drag;if(!d)return;state.drag=null;const p=eventPoint(e),g=geom();
  if(d.mode==='knife'){
   if(!d.moved){renderOverlay();return}
-  const res=resolveCut(d,p,g);
+  const res=resolveCut(d,p,g.tr[d.tk|0]||g);
   if(!res.ok){sfx.error();renderOverlay();return}
   sfx.cut();applyCut(res.angle);return;
  }
@@ -1840,7 +2085,14 @@ document.querySelectorAll('[data-cat]').forEach(b=>b.addEventListener('click',()
 document.querySelectorAll('[data-cat]').forEach(b=>b.classList.remove('active'));
 document.querySelectorAll('[data-panel]').forEach(p=>p.hidden=true);
 state.item=null;setMode('rotate',true);setSheet(false);
-document.getElementById('newCake').addEventListener('click',()=>{sfx.newcake();state.items=[];touchItems();state.cuts=[];state.holes=[];touchHoles();state.slices=[];state.rotation=0;state.eaten=0;state.flavor='cherry';markFlavor();state.item=null;setSheet(false);showCat('party');setMode('rotate',true);updateStats();render()});
+// A brand-new, undecorated, uncut cake with n tiers (the button gives the classic one-tier cherry cake; the kitchen brings its own).
+function freshCake(n,flavor){
+  state.items=[];touchItems();state.cuts=[];state.holes=[];touchHoles();state.slices=[];state.rotation=0;state.eaten=0;state.flavor=FLAVORS[flavor]?flavor:'cherry';markFlavor();
+  state.item=null;setSheet(false);showCat('party');setMode('rotate',true);
+  n=(n===2||n===3)?n:1;if(state.tiers!==n){state.tiers=n;resize()}
+  updateStats();render();
+}
+document.getElementById('newCake').addEventListener('click',()=>{sfx.newcake();freshCake(1,'cherry')});
 
 /* ---------- Seagulls ----------
    One gull at a time flies in from a screen edge at a random moment (roughly every 15-45 s), grabs a slice or a non-sauce
@@ -1860,7 +2112,7 @@ function targetValid(t){return !!t&&(t.kind==='slice'?state.slices.includes(t.re
 function targetPos(t,g){
  if(t.kind==='item'){const s=itemScreen(t.ref,g);return{x:s.x,y:s.y-s.size*1.1}}
  const s=t.ref,f=sliceFrame(s,g),mid=s.start+s.span/2-state.rotation;
- return{x:f.ox+Math.cos(mid)*g.R*.55,y:f.oy+Math.sin(mid)*g.R*.55*g.sy-g.Hside*.5};
+ return{x:f.ox+Math.cos(mid)*g.R*.55,y:f.oy+Math.sin(mid)*g.R*.55*g.sy-(g.n>1?g.stackH:g.Hside)*.5};
 }
 function spawnGull(){
  const c=stealables();if(!c.length||!state.W)return false;
@@ -2034,6 +2286,7 @@ function drawGulls(g){
 
 let lastCompose=0,slowN=0,ema=0;
 function frame(now){
+ if(window.__kPause){lastFrameT=0;requestAnimationFrame(frame);return}
  const nowT=performance.now(),dtg=Math.min(.05,lastFrameT?(nowT-lastFrameT)/1000:0);lastFrameT=nowT;updateGulls(nowT,dtg);const lit=hasLit();flameSync(lit);if(gulls.length||ash.length||bloodP.length||crow)recompose=true;
  if(state.slices.some(s=>s.born&&sliceEase(s)<1))dirty=true; // slice slide-out animation
  if(sceneNoGlow&&!(state.drag&&state.drag.mode==='rotate'))dirty=true; // restore the glow after rotating
@@ -2050,23 +2303,25 @@ function frame(now){
 window.addEventListener('resize',resize);
 if(typeof ResizeObserver!=='undefined')new ResizeObserver(()=>{const r=stage.getBoundingClientRect();if(Math.abs(r.width-state.W)>.5||Math.abs(r.height-state.H)>.5)resize()}).observe(stage);
 /* ---------- Сохранение текущего торта (только он, один) ---------- */
-const CAKE_KEY='cakeStudioCake_v1',ITEM_KEYS=['id','type','x','z','rot','lit','sk','r0','ph','seed','txt','mc'];
+const CAKE_KEY='cakeStudioCake_v1',ITEM_KEYS=['id','type','x','z','rot','lit','sk','r0','ph','seed','txt','mc','t'];
 function serItem(it){const o={};for(const k of ITEM_KEYS)if(it[k]!==undefined)o[k]=it[k];return o}
 function saveCake(){
  saveDirty=false;
- try{localStorage.setItem(CAKE_KEY,JSON.stringify({v:1,flavor:state.flavor,custom:state.custom,melon:melonSlices,rotation:state.rotation,eaten:state.eaten,cuts:state.cuts,holes:state.holes,items:state.items.map(serItem),slices:state.slices.map(s=>({start:s.start,span:s.span,items:s.items.map(serItem)}))}))}catch(e){}
+ try{localStorage.setItem(CAKE_KEY,JSON.stringify({v:1,tiers:state.tiers,flavor:state.flavor,custom:state.custom,melon:melonSlices,rotation:state.rotation,eaten:state.eaten,cuts:state.cuts,holes:state.holes,items:state.items.map(serItem),slices:state.slices.map(s=>({start:s.start,span:s.span,items:s.items.map(serItem)}))}))}catch(e){}
 }
 function loadCake(){
  try{
   const raw=localStorage.getItem(CAKE_KEY);if(!raw)return;
   const d=JSON.parse(raw);if(!d||d.v!==1)return;
+   const nt=(d.tiers===2||d.tiers===3)?d.tiers:1;
+   const fixT=o=>{if(o.t!==undefined){const k=Math.min(nt-1,Math.max(0,o.t|0));if(k)o.t=k;else delete o.t}return o};
   const okItem=o=>o&&typeof o.type==='string'&&isFinite(o.x)&&isFinite(o.z);
   const num=v=>typeof v==='number'&&isFinite(v);
-  const items=(d.items||[]).filter(okItem).map(o=>({...o})),byId=new Map();
+  const items=(d.items||[]).filter(okItem).map(o=>fixT({...o})),byId=new Map();
   for(const it of items)byId.set(it.id,it);
-  const slices=(d.slices||[]).filter(s=>s&&num(s.start)&&num(s.span)).map(s=>({start:s.start,span:s.span,items:(s.items||[]).filter(okItem).map(o=>(o.type==='sauce'&&byId.get(o.id))||{...o})}));
+  const slices=(d.slices||[]).filter(s=>s&&num(s.start)&&num(s.span)).map(s=>({start:s.start,span:s.span,items:(s.items||[]).filter(okItem).map(o=>(o.type==='sauce'&&byId.get(o.id))||fixT({...o}))}));
   const holes=(d.holes||[]).filter(h=>h&&num(h.start)&&num(h.span)).map(h=>({start:h.start,span:h.span}));
-  state.items=items;state.slices=slices;state.holes=holes;
+  state.tiers=nt;state.items=items;state.slices=slices;state.holes=holes;
   state.cuts=(d.cuts||[]).filter(num);
   if(d.custom&&num(d.custom.h)&&num(d.custom.s)&&num(d.custom.l)){state.custom={h:clamp(d.custom.h,0,360),s:clamp(d.custom.s,0,100),l:clamp(d.custom.l,20,80)};buildCustom();customVer++}
   melonSlices=num(d.melon)?clamp(Math.round(d.melon),0,99):0;updateMelonUI();
@@ -2092,8 +2347,56 @@ document.querySelectorAll('[data-cat]').forEach(b=>b.addEventListener('click',up
 loadCake();syncCtl();markFlavor();
 window.__cake.resetTheme=()=>{resize();render();crow=null;crowNext=performance.now()+rnd(25000,65000)};
 window.__cake.repaintBase=()=>{if(uiTintKey()!==baseKey){resize();render()}};
+window.__cake.fresh=(n,f)=>{freshCake(n,f)};
+window.__cake.info=()=>({tiers:state.tiers,items:state.items.length,slices:state.slices.length,holes:state.holes.length,flavor:state.flavor,geo:geom().tr.map(t=>({cx:t.cx,cy:t.cy,R:t.R,H:t.Hside}))});
+window.__cake.isEmpty=()=>!state.items.length&&!state.holes.length&&!state.slices.length&&!state.cuts.length;
+/* Снимок для фото: свежий кадр сцены (подставка, торт, украшения, горящие свечи). Ворона, чайки и линия ножа в кадр не попадают. */
+window.__cake.photo=()=>{
+ if(!state.W||!state.H)return null;
+ renderScene();
+ const g=geom(),d=state.dpr,pw=sceneCv.width,ph=sceneCv.height;
+ const tmp=document.createElement('canvas');tmp.width=pw;tmp.height=ph;const tctx=tmp.getContext('2d');
+ const prev=ctx;ctx=tctx;
+ try{tctx.setTransform(1,0,0,1,0,0);tctx.drawImage(sceneCv,0,0);if(hasLit())drawFlames(g)}finally{ctx=prev}
+ const L=g.R*2.9+g.lt*.9,side=Math.round(Math.min(1400,Math.max(640,L*d))),x0=(g.cx-L/2)*d,y0=(g.cy+g.R*.28-g.lt*.5-L/2)*d;
+ const out=document.createElement('canvas');out.width=side;out.height=side;
+ const octx=out.getContext('2d');octx.fillStyle='#170d14';octx.fillRect(0,0,side,side);
+ octx.drawImage(tmp,x0,y0,L*d,L*d,0,0,side,side);
+ return out;
+};
 window.__cake.leaveDark=()=>{const a=document.querySelector('.cat.active');if(a&&a.dataset.cat==='dark')showCat('party')};
 window.__cake.snd=n=>{if(!window.__sfxOff&&ac)hzSfx(n,1)};
+window.__cake.tint=T;window.__cake.play=play;
+let kPauseT=0;
+window.__cake.pause=on=>{
+ if(on){if(!window.__kPause){window.__kPause=true;kPauseT=performance.now();flameSync(false)}}
+ else if(window.__kPause){window.__kPause=false;const d=performance.now()-kPauseT;if(isFinite(gullNext))gullNext+=d;crowNext+=d;lastFrameT=0;dirty=true;recompose=true;render()}
+};
+/* Статичный торт для кухни: те же функции рисования, что и в редакторе, но в чужой контекст и в любом размере.
+   Рисуется при R0=200 и масштабируется матрицей; всё временное состояние возвращается назад.
+   part: не задан — подставка и весь торт; 'plate' — подставка; число i — стенка и верх яруса i; 's'+i — тень яруса i на ярусе ниже. */
+window.__cake.shape={tiers:TIER_SHAPE,flavors:FLAVORS};
+window.__cake.draw=(c,cx,cy,R,n,flavor,o)=>{
+ o=o||{};const nn=TIER_SHAPE[n]?n:1,L=TIER_SHAPE[nn],R0=200,part=o.part;
+ const g={W:0,H:0,R:R0,sy:.64,Hside:R0*L.h[0],cx:0,cy:0,n:nn,tr:null,k:0,lift:0,lt:0,stackH:0},tr=[g];
+ let yy=0,lift=0;
+ for(let i=1;i<nn;i++){const h=R0*L.h[i];yy-=h;lift+=h;tr.push({W:0,H:0,R:R0*L.r[i],sy:.64,Hside:h,cx:0,cy:yy,n:nn,tr:tr,k:i,lift:lift,lt:0,stackH:0})}
+ g.tr=tr;g.lt=lift;g.stackH=g.Hside+lift;for(const t of tr){t.lt=lift;t.stackH=g.stackH}
+ const sv={ctx:ctx,fl:state.flavor,rot:state.rotation,gc:gc,sp:sprites};
+ c.save();
+ try{
+  ctx=c;state.flavor=FLAVORS[flavor]?flavor:'cherry';state.rotation=0;gc={};sprites=Object.create(null);
+  c.translate(cx,cy);c.scale(R/R0,R/R0);
+  if(part===undefined||part==='plate')drawPlate(g);
+  if(part!=='plate'){
+   const sm=(typeof part==='string'&&part.charAt(0)==='s')?+part.slice(1):-1,one=typeof part==='number';
+   for(let i=0;i<nn;i++){
+    if(i>0&&(part===undefined||i===sm))drawSeat(tr[i],tr[i-1],0,0,0,TAU,undefined);
+    if(part===undefined||(one&&i===part))drawSolid(tr[i],0,0,0,TAU,false,undefined);
+   }
+  }
+ }finally{c.restore();ctx=sv.ctx;state.flavor=sv.fl;state.rotation=sv.rot;gc=sv.gc;sprites=sv.sp}
+};
 setInterval(()=>{if(saveDirty)saveCake()},700);
 window.addEventListener('pagehide',saveCake);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')saveCake()});
@@ -2927,6 +3230,1506 @@ document.addEventListener('keydown',e=>{
  }
 });
 document.addEventListener('visibilitychange',()=>{if(document.hidden)greetBody.querySelectorAll('video').forEach(v=>{try{v.pause()}catch(e){}})});
+/* ---------- Фото торта, горячие клавиши и подсказка «?» ----------
+   Фото берётся из сцены редактора (window.__cake.photo). Клавиши нажимают уже существующие кнопки, поэтому ничего нового не ломается. */
+const photoOv=document.getElementById('photoOv'),keysOv=document.getElementById('keysOv'),photoPrev=document.getElementById('photoPrev'),photoMsg=document.getElementById('photoMsg'),photoShareBtn=document.getElementById('photoShare');
+let photoSrc=null,photoFilter='none',photoBlob=null,photoTok=0,lastFocusEl=null;
+const introUp=()=>document.documentElement.classList.contains('introlock');
+const greetUp=()=>!document.getElementById('greet').hidden;
+const melonUp=()=>!document.getElementById('melonOv').hidden;
+const kitchenOv=document.getElementById('kitchen');let openKitchen=function(){},kitchenEsc=function(){};
+function anyOverlayOpen(){return !photoOv.hidden||!keysOv.hidden||!kitchenOv.hidden}
+function openOverlay(el){lastFocusEl=document.activeElement;el.hidden=false;document.documentElement.classList.add('ov-open');const f=el.querySelector('button');if(f)try{f.focus()}catch(e){}}
+function closeOverlay(el){el.hidden=true;photoBlob=null;photoTok++;if(!anyOverlayOpen())document.documentElement.classList.remove('ov-open');if(lastFocusEl&&lastFocusEl.focus)try{lastFocusEl.focus()}catch(e){}}
+function trapTab(box,e){const f=[...box.querySelectorAll('button')].filter(b=>!b.disabled&&b.offsetParent!==null);if(!f.length)return;const i=f.indexOf(document.activeElement);if(e.shiftKey&&i<=0){e.preventDefault();f[f.length-1].focus()}else if(!e.shiftKey&&i===f.length-1){e.preventDefault();f[0].focus()}}
+function canShareFile(){try{const f=new File([new Uint8Array([1])],'t.png',{type:'image/png'});return !!(navigator.share&&navigator.canShare&&navigator.canShare({files:[f]}))}catch(e){return false}}
+// Простые обработки: «Авто» растягивает уровни по перцентилям и чуть усиливает цвет; остальные — небольшой сдвиг тона.
+function filtered(src,name){
+ const c=document.createElement('canvas');c.width=src.width;c.height=src.height;const x=c.getContext('2d',{willReadFrequently:true});
+ x.drawImage(src,0,0);if(name==='none')return c;
+ const im=x.getImageData(0,0,c.width,c.height),p=im.data,n=p.length;
+ if(name==='auto'){
+  const h=[new Uint32Array(256),new Uint32Array(256),new Uint32Array(256)];
+  for(let i=0;i<n;i+=4){h[0][p[i]]++;h[1][p[i+1]]++;h[2][p[i+2]]++}
+  const tot=n/4,pc=(a,q)=>{let acc=0;for(let v=0;v<256;v++){acc+=a[v];if(acc>=tot*q)return v}return 255};
+  const lo=h.map(a=>pc(a,.01)),hi=h.map(a=>pc(a,.99));
+  const sc=(v,k)=>hi[k]-lo[k]>8?(v-lo[k])*255/(hi[k]-lo[k]):v;
+  for(let i=0;i<n;i+=4){
+   let r=sc(p[i],0),g=sc(p[i+1],1),b=sc(p[i+2],2);
+   const m=(r+g+b)/3;r=m+(r-m)*1.12;g=m+(g-m)*1.12;b=m+(b-m)*1.12;
+   p[i]=r;p[i+1]=g;p[i+2]=b;
+  }
+ }else if(name==='warm'){
+  for(let i=0;i<n;i+=4){p[i]=p[i]*1.06+8;p[i+1]=p[i+1]*1.01+2;p[i+2]=p[i+2]*.92-6}
+ }else if(name==='cool'){
+  for(let i=0;i<n;i+=4){p[i]=p[i]*.95;p[i+2]=p[i+2]*1.07+6}
+ }else if(name==='bw'){
+  for(let i=0;i<n;i+=4){const y=(.299*p[i]+.587*p[i+1]+.114*p[i+2]-128)*1.08+128;p[i]=y;p[i+1]=y;p[i+2]=y}
+ }
+ x.putImageData(im,0,0);return c;
+}
+function showPhoto(name){
+ photoFilter=name;
+ document.querySelectorAll('#photoChips button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.f===name)));
+ const c=filtered(photoSrc,name);
+ const s=Math.min(640,c.width);photoPrev.width=s;photoPrev.height=s;photoPrev.getContext('2d').drawImage(c,0,0,s,s);
+ const tok=++photoTok;photoBlob=null;
+ c.toBlob(b=>{if(tok===photoTok)photoBlob=b},'image/png');
+}
+function savePhoto(){
+ const go=b=>{
+  if(!b){photoMsg.textContent='Не получилось сохранить, попробуй ещё раз';return}
+  const url=URL.createObjectURL(b),a=document.createElement('a');
+  a.href=url;a.download='tort-'+Date.now()+'.png';document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),6000);photoMsg.textContent='Фото сохранено';
+ };
+ if(photoBlob)go(photoBlob);else filtered(photoSrc,photoFilter).toBlob(go,'image/png');
+}
+function sharePhoto(){
+ // navigator.share вызывается сразу в обработчике нажатия, иначе телефон не даст поделиться
+ if(!photoBlob){savePhoto();return}
+ const f=new File([photoBlob],'tort.png',{type:'image/png'});
+ try{
+  if(!navigator.canShare({files:[f]})){savePhoto();return}
+  navigator.share({files:[f],title:'Мой торт'}).catch(()=>{});
+ }catch(e){savePhoto()}
+}
+function openPhoto(){
+ if(introUp()||greetUp()||melonUp()||anyOverlayOpen())return;
+ let src=null;try{src=window.__cake.photo()}catch(e){src=null}
+ if(!src)return;
+ photoSrc=src;photoMsg.textContent='';photoShareBtn.hidden=!canShareFile();
+ openOverlay(photoOv);showPhoto('none');
+}
+function openKeys(){if(introUp()||greetUp()||anyOverlayOpen())return;openOverlay(keysOv)}
+const KEY_TOOLS={'1':'knife','2':'lighter','3':'eraser'},KEY_CATS={'4':'party','5':'decor','6':'berry','7':'sauce','8':'fingers','9':'flavor'};
+document.addEventListener('keydown',e=>{
+ if(anyOverlayOpen()){
+  if(!kitchenOv.hidden){if(e.key==='Escape'){e.preventDefault();kitchenEsc()}else if(e.key==='Tab'){const a=document.activeElement;if(!a||!kitchenOv.contains(a)||a===kitchenOv){const f=[...kitchenOv.querySelectorAll('button')].filter(b=>!b.disabled&&b.offsetParent!==null);if(f.length){e.preventDefault();(e.shiftKey?f[f.length-1]:f[0]).focus()}}else trapTab(kitchenOv,e)}return}
+  const box=!photoOv.hidden?photoOv:keysOv;
+  if(e.key==='Escape'){e.preventDefault();closeOverlay(box)}
+  else if(e.key==='Tab')trapTab(box.querySelector('.hbox'),e);
+  return;
+ }
+ if(e.ctrlKey||e.metaKey||e.altKey)return;
+ const t=e.target;if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)))return;
+ if(introUp()||greetUp()||melonUp())return;
+ const k=e.key;let el=null;
+ if(KEY_TOOLS[k])el=document.querySelector('.tool[data-mode="'+KEY_TOOLS[k]+'"]');
+ else if(KEY_CATS[k])el=document.querySelector('.cat[data-cat="'+KEY_CATS[k]+'"]');
+ else if(k==='m'||k==='M')el=document.getElementById('swMusic');
+ else if(k==='s'||k==='S')el=document.getElementById('swSfx');
+ if(el){e.preventDefault();el.click();return}
+ if(k==='f'||k==='F'){e.preventDefault();openPhoto()}
+ else if(k==='?'){e.preventDefault();openKeys()}
+ else if(k==='b'||k==='B'){e.preventDefault();openKitchen()}
+});
+document.getElementById('camBtn').addEventListener('click',openPhoto);
+document.getElementById('keyHint').addEventListener('click',openKeys);
+document.getElementById('photoClose').addEventListener('click',()=>closeOverlay(photoOv));
+document.getElementById('keysClose').addEventListener('click',()=>closeOverlay(keysOv));
+photoOv.addEventListener('click',e=>{if(e.target===photoOv)closeOverlay(photoOv)});
+keysOv.addEventListener('click',e=>{if(e.target===keysOv)closeOverlay(keysOv)});
+document.querySelectorAll('#photoChips button').forEach(b=>b.addEventListener('click',()=>showPhoto(b.dataset.f)));
+document.getElementById('photoSave').addEventListener('click',savePhoto);
+photoShareBtn.addEventListener('click',sharePhoto);
+
+(function(){'use strict';
+/* ---------- Кухня (отдельная сцена): рисование ---------- */
+const TAU=Math.PI*2;
+const cl=(v,a,b)=>v<a?a:v>b?b:v,mixn=(a,b,t)=>a+(b-a)*t;
+const tint=c=>{try{return window.__cake&&window.__cake.tint?window.__cake.tint(c):c}catch(e){return c}};
+function rr(c,x,y,w,h,r){r=Math.max(0,Math.min(r,w/2,h/2));c.beginPath();c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.arcTo(x+w,y,x+w,y+r,r);c.lineTo(x+w,y+h-r);c.arcTo(x+w,y+h,x+w-r,y+h,r);c.lineTo(x+r,y+h);c.arcTo(x,y+h,x,y+h-r,r);c.lineTo(x,y+r);c.arcTo(x,y,x+r,y,r);c.closePath()}
+function lin(c,x0,y0,x1,y1,s){const g=c.createLinearGradient(x0,y0,x1,y1);for(let i=0;i<s.length;i+=2)g.addColorStop(s[i],s[i+1]);return g}
+function rad(c,x,y,r0,r1,s,x1,y1){const g=c.createRadialGradient(x,y,r0,x1===undefined?x:x1,y1===undefined?y:y1,r1);for(let i=0;i<s.length;i+=2)g.addColorStop(s[i],s[i+1]);return g}
+function ell(c,x,y,rx,ry,rot){c.beginPath();c.ellipse(x,y,Math.max(.01,rx),Math.max(.01,ry),rot||0,0,TAU)}
+function lw(c,s,k){c.lineWidth=Math.max(1,s*k)}
+// pseudo-random that does not change between frames
+function srnd(seed){let a=seed|0||1;return()=>{a=(a*1664525+1013904223)|0;return((a>>>0)%100000)/100000}}
+
+/* ---- фон: ночная кухня (перекрашивается вместе с темой интерфейса) ---- */
+function drawBg(c,W,H,L){
+  const cY=L.cY,U=L.U;
+  c.fillStyle=lin(c,0,0,0,cY,[0,tint('#3a2230'),1,tint('#26141f')]);c.fillRect(0,0,W,cY+6);
+  // плитка «кирпичиком»
+  const th=Math.max(15,Math.round(26*U)),tw=Math.round(th*2.05);
+  c.strokeStyle='rgba(255,205,220,.07)';c.lineWidth=1;c.beginPath();
+  let row=0;for(let y=th;y<cY;y+=th,row++){c.moveTo(0,y+.5);c.lineTo(W,y+.5);const off=(row%2)*tw/2;for(let x=-off+tw;x<W;x+=tw){c.moveTo(x+.5,y-th);c.lineTo(x+.5,y)}}
+  c.stroke();
+  // лёгкий блик на плитке
+  c.fillStyle=lin(c,0,0,W,cY,[0,'rgba(255,255,255,.05)',.5,'rgba(255,255,255,0)',1,'rgba(255,255,255,.03)']);c.fillRect(0,0,W,cY);
+  // окно с лунной ночью
+  const ww=L.win.w,wh=L.win.h,wx=L.win.x,wy=L.win.y;
+  c.fillStyle='rgba(0,0,0,.35)';rr(c,wx+4,wy+6,ww,wh,10*U);c.fill();
+  c.fillStyle=lin(c,0,wy,0,wy+wh,[0,tint('#8a5a44'),1,tint('#5a3626')]);rr(c,wx-7*U,wy-7*U,ww+14*U,wh+14*U,12*U);c.fill();
+  c.save();rr(c,wx,wy,ww,wh,6*U);c.clip();
+  c.fillStyle=lin(c,0,wy,0,wy+wh,[0,tint('#162052'),1,tint('#4a4690')]);c.fillRect(wx,wy,ww,wh);
+  const rn=srnd(7);c.fillStyle='rgba(255,255,255,.85)';
+  for(let i=0;i<9;i++){const sx=wx+rn()*ww,sy=wy+rn()*wh*.7,sr=(.5+rn()*1.1)*U;ell(c,sx,sy,sr,sr);c.fill()}
+  const mx=wx+ww*.68,my=wy+wh*.3,mr=Math.min(ww,wh)*.15;
+  c.fillStyle=rad(c,mx,my,mr*.2,mr*2.6,[0,'rgba(255,246,214,.5)',1,'rgba(255,246,214,0)']);c.fillRect(wx,wy,ww,wh);
+  c.fillStyle='#fff6d6';ell(c,mx,my,mr,mr);c.fill();
+  c.fillStyle=tint('#c9c3e8');ell(c,mx-mr*.3,my+mr*.2,mr*.22,mr*.22);c.fill();ell(c,mx+mr*.25,my-mr*.3,mr*.14,mr*.14);c.fill();
+  // силуэт крыш
+  c.fillStyle=tint('#120b24');c.beginPath();c.moveTo(wx,wy+wh);c.lineTo(wx,wy+wh*.82);c.lineTo(wx+ww*.18,wy+wh*.82);c.lineTo(wx+ww*.18,wy+wh*.74);c.lineTo(wx+ww*.3,wy+wh*.66);c.lineTo(wx+ww*.42,wy+wh*.74);c.lineTo(wx+ww*.42,wy+wh*.86);c.lineTo(wx+ww*.62,wy+wh*.86);c.lineTo(wx+ww*.62,wy+wh*.78);c.lineTo(wx+ww*.8,wy+wh*.78);c.lineTo(wx+ww*.8,wy+wh*.88);c.lineTo(wx+ww,wy+wh*.88);c.lineTo(wx+ww,wy+wh);c.closePath();c.fill();
+  c.fillStyle='rgba(255,214,140,.9)';for(const q of [[.26,.8],[.34,.78],[.52,.9],[.7,.84],[.9,.93]]){c.fillRect(wx+ww*q[0],wy+wh*q[1],2.5*U,3*U)}
+  c.restore();
+  c.fillStyle=tint('#7b4c38');c.fillRect(wx+ww/2-1.5*U,wy,3*U,wh);c.fillRect(wx,wy+wh*.46,ww,3*U);
+  c.fillStyle=tint('#a8745a');rr(c,wx-10*U,wy+wh+4*U,ww+20*U,7*U,3*U);c.fill();
+  // подвесная лампа
+  const lx=L.lamp.x,ly=L.lamp.y;
+  c.fillStyle=rad(c,lx,ly+18*U,6*U,Math.max(W,H)*.52,[0,'rgba(255,208,140,.34)',.35,'rgba(255,190,120,.12)',1,'rgba(255,190,120,0)']);c.fillRect(0,0,W,H);
+  c.strokeStyle='#120a0f';lw(c,U,2);c.beginPath();c.moveTo(lx,-4);c.lineTo(lx,ly);c.stroke();
+  c.fillStyle=lin(c,lx-26*U,0,lx+26*U,0,[0,tint('#c8456a'),.5,tint('#ff7b9c'),1,tint('#a8304f')]);c.beginPath();c.moveTo(lx-9*U,ly);c.lineTo(lx+9*U,ly);c.lineTo(lx+27*U,ly+24*U);c.lineTo(lx-27*U,ly+24*U);c.closePath();c.fill();
+  c.fillStyle='#fff3c4';ell(c,lx,ly+25*U,20*U,6*U);c.fill();
+  c.fillStyle=rad(c,lx,ly+26*U,1,22*U,[0,'rgba(255,248,210,1)',1,'rgba(255,230,160,0)']);ell(c,lx,ly+28*U,22*U,14*U);c.fill();
+  // столешница
+  const g=lin(c,0,cY,0,H,[0,tint('#a56b45'),.5,tint('#7a4a2e'),1,tint('#4a2a1a')]);c.fillStyle=g;c.fillRect(0,cY,W,H-cY);
+  const pr=srnd(11);const ph=Math.max(26,Math.round(46*U));
+  for(let y=cY+ph*.55,i=0;y<H;y+=ph*(1+i*.12),i++){c.strokeStyle='rgba(30,12,4,.34)';lw(c,U,1.4);c.beginPath();c.moveTo(0,y);c.lineTo(W,y);c.stroke();
+    c.strokeStyle='rgba(255,210,160,.08)';c.beginPath();c.moveTo(0,y+2);c.lineTo(W,y+2);c.stroke();
+    for(let k=0;k<5;k++){const gx=pr()*W,gl=(40+pr()*140)*U;c.strokeStyle='rgba(40,18,6,.13)';c.beginPath();c.moveTo(gx,y-ph*.3*pr());c.lineTo(gx+gl,y-ph*.3*pr()+pr()*4-2);c.stroke()}}
+  c.fillStyle=lin(c,0,cY,0,cY+34*U,[0,'rgba(0,0,0,.46)',1,'rgba(0,0,0,0)']);c.fillRect(0,cY,W,34*U);
+  c.fillStyle='rgba(255,226,190,.35)';c.fillRect(0,cY,W,Math.max(1,2*U));
+  c.fillStyle=rad(c,lx,cY+(H-cY)*.34,10,Math.max(W*.62,H*.5),[0,'rgba(255,214,150,.20)',1,'rgba(255,214,150,0)']);c.save();c.translate(0,0);c.fillRect(0,cY,W,H-cY);c.restore();
+  // виньетка
+  c.fillStyle=rad(c,W/2,H*.46,Math.min(W,H)*.35,Math.max(W,H)*.78,[0,'rgba(0,0,0,0)',1,'rgba(8,2,6,.55)']);c.fillRect(0,0,W,H);
+}
+
+/* ---- продукты: рисуются в квадрате примерно [-s, s] ---- */
+function shadowUnder(c,s,w){c.fillStyle='rgba(0,0,0,.28)';ell(c,0,s*.9,s*(w||.7),s*.13);c.fill()}
+function sprFlour(c,s){
+  shadowUnder(c,s,.72);
+  c.beginPath();c.moveTo(-.62*s,-.45*s);c.quadraticCurveTo(-.8*s,.2*s,-.68*s,.82*s);c.quadraticCurveTo(0,.95*s,.68*s,.82*s);c.quadraticCurveTo(.8*s,.2*s,.62*s,-.45*s);c.closePath();
+  c.fillStyle=lin(c,-s,0,s,0,[0,'#c4945c',.5,'#e8c690',1,'#b48650']);c.fill();c.strokeStyle='#8a5f33';lw(c,s,.04);c.stroke();
+  c.fillStyle='#fffaf0';ell(c,0,-.5*s,.58*s,.15*s);c.fill();
+  c.fillStyle=lin(c,0,-.5*s,0,-.28*s,[0,'#b98a54',1,'#946a3b']);rr(c,-.65*s,-.46*s,1.3*s,.19*s,s*.05);c.fill();
+  c.strokeStyle='#5b3f1f';lw(c,s,.03);c.setLineDash([s*.08,s*.06]);c.beginPath();c.moveTo(-.58*s,-.36*s);c.lineTo(.58*s,-.36*s);c.stroke();c.setLineDash([]);
+  c.fillStyle='#fff6e2';rr(c,-.4*s,-.1*s,.8*s,.66*s,s*.09);c.fill();c.strokeStyle='#c8a46c';lw(c,s,.03);c.stroke();
+  c.strokeStyle='#a8731c';c.fillStyle='#e0a233';lw(c,s,.045);c.beginPath();c.moveTo(0,.5*s);c.lineTo(0,.02*s);c.stroke();
+  for(let i=0;i<3;i++){const y=.4*s-i*.14*s;c.beginPath();c.ellipse(-.1*s,y,.1*s,.045*s,-.6,0,TAU);c.fill();c.beginPath();c.ellipse(.1*s,y,.1*s,.045*s,.6,0,TAU);c.fill()}
+  c.beginPath();c.ellipse(0,-.04*s,.045*s,.09*s,0,0,TAU);c.fill();
+}
+function egg(c,x,y,s,a,col){
+  c.save();c.translate(x,y);c.rotate(a||0);
+  c.fillStyle=col||lin(c,-.3*s,-.4*s,.3*s,.4*s,[0,'#fffaf0',.55,'#f4e3cf',1,'#dcc2a4']);c.beginPath();c.ellipse(0,0,.3*s,.4*s,0,0,TAU);c.fill();
+  c.strokeStyle='rgba(120,80,40,.4)';lw(c,s,.025);c.stroke();
+  c.fillStyle='rgba(255,255,255,.7)';c.beginPath();c.ellipse(-.1*s,-.16*s,.06*s,.12*s,.4,0,TAU);c.fill();c.restore();
+}
+function sprEggs(c,s){
+  shadowUnder(c,s,.8);
+  c.fillStyle=lin(c,0,.2*s,0,.85*s,[0,'#b98a5a',1,'#7d5532']);rr(c,-.82*s,.25*s,1.64*s,.55*s,s*.18);c.fill();
+  c.strokeStyle='#5d3d20';lw(c,s,.035);c.stroke();
+  egg(c,-.44*s,.1*s,s,-.25);egg(c,.44*s,.1*s,s,.25);egg(c,0,-.1*s,s*1.08,0);
+  c.fillStyle=lin(c,0,.42*s,0,.82*s,[0,'#c89a68',1,'#8d6238']);c.beginPath();c.moveTo(-.84*s,.42*s);c.quadraticCurveTo(0,.2*s,.84*s,.42*s);c.lineTo(.8*s,.8*s);c.quadraticCurveTo(0,.92*s,-.8*s,.8*s);c.closePath();c.fill();
+  c.strokeStyle='rgba(60,30,10,.35)';lw(c,s,.03);for(let i=-3;i<=3;i++){c.beginPath();c.moveTo(i*.22*s,.4*s);c.lineTo(i*.22*s,.86*s);c.stroke()}
+}
+function sprSugar(c,s){
+  shadowUnder(c,s,.62);
+  c.fillStyle='rgba(200,230,255,.28)';rr(c,-.52*s,-.45*s,1.04*s,1.32*s,s*.2);c.fill();
+  c.save();rr(c,-.52*s,-.45*s,1.04*s,1.32*s,s*.2);c.clip();
+  c.fillStyle=lin(c,-s,0,s,0,[0,'#e9edf6',.5,'#ffffff',1,'#cdd5e6']);c.fillRect(-.6*s,-.1*s,1.2*s,1.1*s);
+  const r=srnd(5);c.fillStyle='rgba(120,140,190,.5)';for(let i=0;i<16;i++){c.fillRect((r()-.5)*.9*s,-.05*s+r()*.9*s,s*.05,s*.05)}
+  c.restore();
+  c.strokeStyle='rgba(255,255,255,.65)';lw(c,s,.045);rr(c,-.52*s,-.45*s,1.04*s,1.32*s,s*.2);c.stroke();
+  c.fillStyle=lin(c,-s,0,s,0,[0,'#8e949f',.5,'#e3e7ee',1,'#868c97']);rr(c,-.5*s,-.68*s,1.0*s,.26*s,s*.07);c.fill();
+  c.fillStyle='#c5cad4';rr(c,-.12*s,-.82*s,.24*s,.16*s,s*.06);c.fill();
+  c.fillStyle='#ff8fae';rr(c,-.52*s,.12*s,1.04*s,.42*s,s*.04);c.fill();
+  c.fillStyle='#fff';c.beginPath();const hx=0,hy=.34*s,hs=s*.12;c.moveTo(hx,hy+hs);c.bezierCurveTo(hx-hs*2.2,hy-hs*.3,hx-hs*.8,hy-hs*1.6,hx,hy-hs*.5);c.bezierCurveTo(hx+hs*.8,hy-hs*1.6,hx+hs*2.2,hy-hs*.3,hx,hy+hs);c.fill();
+  c.fillStyle='rgba(255,255,255,.5)';rr(c,-.4*s,-.35*s,.1*s,.9*s,s*.05);c.fill();
+}
+function sprButter(c,s){
+  shadowUnder(c,s,.82);
+  const w=.78*s,h=.5*s,d=.3*s;
+  c.fillStyle='#f0bf3c';c.beginPath();c.moveTo(w,-h*.2);c.lineTo(w+d,-h*.2-d*.55);c.lineTo(w+d,h*.7-d*.55);c.lineTo(w,h*.7+0);c.closePath();c.fill();
+  c.fillStyle='#ffe98c';c.beginPath();c.moveTo(-w,-h*.2);c.lineTo(-w+d,-h*.2-d*.55);c.lineTo(w+d,-h*.2-d*.55);c.lineTo(w,-h*.2);c.closePath();c.fill();
+  c.fillStyle=lin(c,0,-h*.2,0,h*.7,[0,'#ffd96a',1,'#f2b92f']);c.fillRect(-w,-h*.2,2*w,h*.9);
+  c.fillStyle=lin(c,-w,0,w,0,[0,'#9aa2ad',.4,'#f1f4f8',1,'#aab1bb']);c.beginPath();c.moveTo(-w,.12*h);c.lineTo(w,.12*h);c.lineTo(w,h*.7);c.lineTo(-w,h*.7);c.closePath();c.fill();
+  c.strokeStyle='rgba(70,80,95,.45)';lw(c,s,.03);for(let i=0;i<6;i++){const x=-w+i*(2*w/5);c.beginPath();c.moveTo(x,.12*h);c.lineTo(x+s*.06,h*.7);c.stroke()}
+  c.fillStyle='rgba(255,255,255,.4)';c.fillRect(-w*.9,-h*.12,s*.5,s*.05);
+}
+function sprMilk(c,s){
+  shadowUnder(c,s,.62);
+  const w=.56*s;
+  c.fillStyle='#d9e6f7';c.beginPath();c.moveTo(w,-.38*s);c.lineTo(w+.3*s,-.28*s);c.lineTo(w+.3*s,.78*s);c.lineTo(w,.9*s);c.closePath();c.fill();
+  c.fillStyle=lin(c,0,-.4*s,0,.9*s,[0,'#ffffff',1,'#e8eefb']);c.fillRect(-w,-.38*s,2*w,1.28*s);
+  c.fillStyle='#f4f8ff';c.beginPath();c.moveTo(-w,-.38*s);c.lineTo(0,-.78*s);c.lineTo(w,-.38*s);c.closePath();c.fill();
+  c.fillStyle='#cfdcf1';c.beginPath();c.moveTo(w,-.38*s);c.lineTo(0,-.78*s);c.lineTo(w+.3*s,-.62*s);c.lineTo(w+.3*s,-.28*s);c.closePath();c.fill();
+  c.fillStyle='#3d86f0';c.fillRect(-w,.5*s,2*w,.22*s);
+  c.fillStyle='#3d86f0';c.beginPath();c.moveTo(0,-.18*s);c.bezierCurveTo(.26*s,.14*s,.28*s,.3*s,0,.34*s);c.bezierCurveTo(-.28*s,.3*s,-.26*s,.14*s,0,-.18*s);c.fill();
+  c.fillStyle='rgba(255,255,255,.7)';ell(c,-.07*s,.17*s,.045*s,.08*s);c.fill();
+  c.fillStyle='#ff7a9a';rr(c,-.1*s,-.84*s,.2*s,.1*s,s*.04);c.fill();
+}
+function sprPowder(c,s){
+  shadowUnder(c,s,.6);
+  c.fillStyle=lin(c,-s,0,s,0,[0,'#c9446c',.45,'#ff7fa4',1,'#b53a5f']);rr(c,-.5*s,-.42*s,1.0*s,1.3*s,s*.1);c.fill();
+  c.fillStyle='#fff7f0';c.fillRect(-.5*s,.0,1.0*s,.5*s);
+  c.fillStyle=lin(c,-s,0,s,0,[0,'#9aa2ad',.5,'#eef1f6',1,'#9aa2ad']);rr(c,-.54*s,-.62*s,1.08*s,.26*s,s*.08);c.fill();
+  c.fillStyle='#c5cad4';ell(c,0,-.5*s,.4*s,.09*s);c.fill();
+  c.strokeStyle='#e0527c';c.fillStyle='#e0527c';lw(c,s,.05);
+  for(let i=0;i<3;i++){const x=-.28*s+i*.28*s;c.beginPath();c.moveTo(x,.4*s);c.lineTo(x,.16*s);c.stroke();c.beginPath();c.moveTo(x,.2*s);c.lineTo(x-.07*s,.28*s);c.moveTo(x,.2*s);c.lineTo(x+.07*s,.28*s);c.stroke()}
+  c.fillStyle='rgba(255,255,255,.4)';rr(c,-.4*s,-.34*s,.1*s,.64*s,s*.05);c.fill();
+}
+function sprSalt(c,s){
+  shadowUnder(c,s,.5);
+  c.fillStyle='rgba(215,235,255,.3)';rr(c,-.36*s,-.2*s,.72*s,1.05*s,s*.16);c.fill();
+  c.save();rr(c,-.36*s,-.2*s,.72*s,1.05*s,s*.16);c.clip();c.fillStyle=lin(c,-s,0,s,0,[0,'#dfe5f1',.5,'#fff',1,'#c9d1e2']);c.fillRect(-.4*s,.1*s,.8*s,.8*s);c.restore();
+  c.strokeStyle='rgba(255,255,255,.6)';lw(c,s,.04);rr(c,-.36*s,-.2*s,.72*s,1.05*s,s*.16);c.stroke();
+  c.fillStyle=lin(c,-s,0,s,0,[0,'#868c97',.5,'#eef1f6',1,'#868c97']);c.beginPath();c.moveTo(-.4*s,-.2*s);c.lineTo(-.28*s,-.62*s);c.quadraticCurveTo(0,-.76*s,.28*s,-.62*s);c.lineTo(.4*s,-.2*s);c.closePath();c.fill();
+  c.fillStyle='#3b4150';for(const p of [[-.12,-.5],[.12,-.5],[0,-.4],[-.14,-.32],[.14,-.32]]){ell(c,p[0]*s,p[1]*s,.035*s,.035*s);c.fill()}
+}
+function sprGarlic(c,s){
+  shadowUnder(c,s,.62);
+  c.beginPath();c.moveTo(0,-.78*s);c.bezierCurveTo(.1*s,-.5*s,.2*s,-.4*s,.6*s,-.1*s);c.bezierCurveTo(.86*s,.3*s,.5*s,.84*s,0,.84*s);c.bezierCurveTo(-.5*s,.84*s,-.86*s,.3*s,-.6*s,-.1*s);c.bezierCurveTo(-.2*s,-.4*s,-.1*s,-.5*s,0,-.78*s);c.closePath();
+  c.fillStyle=rad(c,-.2*s,-.1*s,s*.05,s*1.0,[0,'#ffffff',.6,'#f1e8f3',1,'#cdb9d6']);c.fill();c.strokeStyle='#a58fb0';lw(c,s,.04);c.stroke();
+  c.strokeStyle='rgba(150,120,170,.6)';lw(c,s,.035);for(const k of [-.34,0,.34]){c.beginPath();c.moveTo(0,-.7*s);c.quadraticCurveTo(k*s*1.5,.1*s,k*s,.82*s);c.stroke()}
+  c.strokeStyle='#8a9a4a';lw(c,s,.08);c.beginPath();c.moveTo(0,-.76*s);c.quadraticCurveTo(.1*s,-.9*s,.18*s,-.98*s);c.stroke();
+}
+function sprKetchup(c,s){
+  shadowUnder(c,s,.55);
+  c.fillStyle=lin(c,-s,0,s,0,[0,'#a8190f',.45,'#f0402f',1,'#9a160d']);c.beginPath();c.moveTo(-.4*s,-.2*s);c.quadraticCurveTo(-.46*s,.86*s,-.3*s,.88*s);c.lineTo(.3*s,.88*s);c.quadraticCurveTo(.46*s,.86*s,.4*s,-.2*s);c.quadraticCurveTo(.3*s,-.46*s,.14*s,-.5*s);c.lineTo(-.14*s,-.5*s);c.quadraticCurveTo(-.3*s,-.46*s,-.4*s,-.2*s);c.closePath();c.fill();
+  c.fillStyle='#fff7f0';rr(c,-.14*s,-.78*s,.28*s,.32*s,s*.06);c.fill();c.fillStyle='#d9d2c8';rr(c,-.06*s,-.94*s,.12*s,.18*s,s*.04);c.fill();
+  c.fillStyle='#fff7f0';ell(c,0,.3*s,.3*s,.34*s);c.fill();
+  c.fillStyle='#e03a2a';ell(c,0,.34*s,.15*s,.15*s);c.fill();c.fillStyle='#4a9a3a';c.fillRect(-.03*s,.16*s,.06*s,.06*s);
+  c.fillStyle='rgba(255,255,255,.4)';rr(c,-.3*s,-.1*s,.08*s,.8*s,s*.04);c.fill();
+}
+function sprFish(c,s){
+  shadowUnder(c,s,.78);
+  c.save();c.translate(0,.12*s);c.rotate(-.16);
+  c.fillStyle='#5d7aa0';c.beginPath();c.moveTo(.5*s,0);c.lineTo(.92*s,-.34*s);c.lineTo(.84*s,0);c.lineTo(.92*s,.34*s);c.closePath();c.fill();
+  c.fillStyle=lin(c,0,-.4*s,0,.4*s,[0,'#4f6e99',.5,'#a9c3de',1,'#e8f0f7']);c.beginPath();c.ellipse(-.1*s,0,.62*s,.38*s,0,0,TAU);c.fill();c.strokeStyle='#37507a';lw(c,s,.035);c.stroke();
+  c.fillStyle='#5d7aa0';c.beginPath();c.moveTo(-.1*s,-.34*s);c.lineTo(.12*s,-.62*s);c.lineTo(.2*s,-.3*s);c.closePath();c.fill();
+  c.strokeStyle='rgba(55,80,122,.5)';lw(c,s,.03);c.beginPath();c.arc(-.34*s,0,.28*s,-.9,.9);c.stroke();
+  c.fillStyle='#fff';ell(c,-.46*s,-.07*s,.075*s,.075*s);c.fill();c.fillStyle='#111';ell(c,-.47*s,-.07*s,.04*s,.04*s);c.fill();
+  c.strokeStyle='#37507a';lw(c,s,.035);c.beginPath();c.moveTo(-.66*s,.08*s);c.quadraticCurveTo(-.58*s,.14*s,-.52*s,.1*s);c.stroke();
+  c.restore();
+}
+const ING={
+  flour:{name:'Мука',ok:true,draw:sprFlour,col:'#fffaf0'},
+  eggs:{name:'Яйца',ok:true,draw:sprEggs,col:'#ffcf3d'},
+  sugar:{name:'Сахар',ok:true,draw:sprSugar,col:'#ffffff'},
+  butter:{name:'Масло',ok:true,draw:sprButter,col:'#ffe27a'},
+  milk:{name:'Молоко',ok:true,draw:sprMilk,col:'#fffdf8'},
+  powder:{name:'Разрыхлитель',ok:true,draw:sprPowder,col:'#ffffff'},
+  salt:{name:'Соль',ok:false,draw:sprSalt,col:'#ffffff'},
+  garlic:{name:'Чеснок',ok:false,draw:sprGarlic,col:'#f1e8f3'},
+  ketchup:{name:'Кетчуп',ok:false,draw:sprKetchup,col:'#e8402f'},
+  fish:{name:'Рыбка',ok:false,draw:sprFish,col:'#9fb8d4'}
+};
+
+
+/* ---- миска, венчик, форма, духовка, коржи ---- */
+function batterColor(add,p){
+  // сухая смесь → жидкое тесто → гладкое тесто
+  const wet=(add.eggs?.3:0)+(add.milk?.34:0)+(add.butter?.18:0)+(add.sugar?.08:0);
+  const a=[247,241,226],b=[246,222,160],d=[243,208,128];
+  const m=cl(wet,0,1),r0=mixn(a[0],b[0],m),g0=mixn(a[1],b[1],m),b0=mixn(a[2],b[2],m),q=cl(p,0,1);
+  return 'rgb('+Math.round(mixn(r0,d[0],q))+','+Math.round(mixn(g0,d[1],q))+','+Math.round(mixn(b0,d[2],q))+')';
+}
+function drawBatter(c,x,y,rx,ry,o){
+  // o: add{}, mix 0..1, t, blobs[]
+  const col=batterColor(o.add||{},o.mix||0);
+  c.save();ell(c,x,y,rx,ry);c.clip();
+  c.fillStyle=col;c.fillRect(x-rx,y-ry,2*rx,2*ry);
+  const mixP=o.mix||0;
+  if(o.blobs&&mixP<.98){
+    const al=1-cl(mixP*1.05,0,1);
+    for(const b of o.blobs){
+      c.globalAlpha=al;
+      if(b.k==='flour'){c.fillStyle='#fffdf6';ell(c,x+b.x*rx,y+b.y*ry,b.r*rx*1.1,b.r*ry*1.1);c.fill()}
+      else if(b.k==='yolk'){c.fillStyle='#ffb91f';ell(c,x+b.x*rx,y+b.y*ry,b.r*rx*.7,b.r*ry*.8);c.fill();c.fillStyle='rgba(255,255,255,.5)';ell(c,x+b.x*rx-b.r*rx*.18,y+b.y*ry-b.r*ry*.2,b.r*rx*.18,b.r*ry*.2);c.fill()}
+      else if(b.k==='butter'){c.fillStyle='#ffe98a';rr(c,x+b.x*rx-b.r*rx*.6,y+b.y*ry-b.r*ry*.5,b.r*rx*1.2,b.r*ry*1.0,3);c.fill()}
+      else if(b.k==='sugar'){c.fillStyle='#ffffff';for(let i=0;i<7;i++){c.fillRect(x+(b.x+Math.cos(i*2.3)*b.r*.7)*rx,y+(b.y+Math.sin(i*1.7)*b.r*.7)*ry,2,2)}}
+      else if(b.k==='milk'){c.fillStyle='rgba(255,255,255,.6)';ell(c,x+b.x*rx,y+b.y*ry,b.r*rx*1.3,b.r*ry*1.1);c.fill()}
+      else if(b.k==='powder'){c.fillStyle='rgba(255,255,255,.7)';for(let i=0;i<8;i++){c.fillRect(x+(b.x+Math.cos(i*2.1)*b.r*.8)*rx,y+(b.y+Math.sin(i*2.9)*b.r*.8)*ry,1.5,1.5)}}
+    }
+    c.globalAlpha=1;
+  }
+  // завитки от венчика
+  if(mixP>.04){
+    c.strokeStyle='rgba(255,246,214,'+(.28+.3*mixP)+')';lw(c,1,2);
+    const rot=(o.t||0)*3.2;
+    for(let k=0;k<3;k++){c.beginPath();for(let a=0;a<=TAU*1.3;a+=.25){const rr0=(.18+k*.26+a*.025)*Math.min(1,rx),px=x+Math.cos(a+rot+k*2)*rr0*rx,py=y+Math.sin(a+rot+k*2)*rr0*ry;a===0?c.moveTo(px,py):c.lineTo(px,py)}c.stroke()}
+  }
+  c.fillStyle=lin(c,x-rx,y-ry,x+rx,y+ry,[0,'rgba(255,255,255,.22)',.5,'rgba(255,255,255,0)',1,'rgba(0,0,0,.14)']);c.fillRect(x-rx,y-ry,2*rx,2*ry);
+  c.restore();
+}
+function softShadow(c,x,y,rx,ry,a){
+  c.save();c.translate(x,y);c.scale(1,ry/rx);
+  const g=c.createRadialGradient(0,0,rx*.08,0,0,rx);g.addColorStop(0,'rgba(0,0,0,'+a+')');g.addColorStop(1,'rgba(0,0,0,0)');
+  c.fillStyle=g;c.beginPath();c.arc(0,0,rx,0,TAU);c.fill();c.restore();
+}
+function bowlProf(r,t){return r*Math.sqrt(Math.max(0,1-t*t))}
+function drawBowl(c,x,y,r,o){
+  // (x,y) — центр верхнего края; миска — тело вращения: профиль ρ(t)=r·√(1−t²), снизу небольшое плоское донце
+  o=o||{};const KK=.3,ry=r*KK,D=r*.8,tb=.9,yb=y+D*tb,rb=bowlProf(r,tb),N=22;
+  c.save();
+  if(o.tilt){c.translate(x+r*.86,y);c.rotate(o.tilt);c.translate(-(x+r*.86),-y)}
+  if(!o.noShadow){softShadow(c,x,yb+rb*KK*.5,rb*2.3,rb*KK*1.7,.5);softShadow(c,x,yb+rb*KK*.8,r*1.0,r*.2,.18)}
+  // обод (верхняя грань губы)
+  c.fillStyle=lin(c,0,y-ry,0,y+ry,[0,'#ffffff',.5,'#f4ecdf',1,'#d9cdb9']);ell(c,x,y,r,ry);c.fill();
+  // внутренность
+  c.fillStyle=lin(c,0,y-ry*.9,0,y+ry*.9,[0,'#d4c9b6',.45,'#968a78',1,'#6e6353']);ell(c,x,y+ry*.04,r*.945,ry*.9);c.fill();
+  c.save();ell(c,x,y+ry*.04,r*.945,ry*.9);c.clip();
+  c.fillStyle='rgba(255,255,255,.16)';ell(c,x-r*.25,y-ry*.35,r*.5,ry*.22);c.fill();
+  c.restore();
+  if(o.batter){
+    const lv=o.batter.lvl===undefined?1:cl(o.batter.lvl,0,1);
+    if(lv>.02){
+      const ts=.12+(1-lv)*.42,rs=bowlProf(r,ts)*.985;
+      drawBatter(c,x,y+D*ts,rs,rs*KK*.985,o.batter);
+      c.strokeStyle='rgba(255,255,255,.3)';lw(c,r,.012);ell(c,x,y+D*ts,rs*.992,rs*KK*.975);c.stroke();
+    }
+  }
+  if(o.mid)o.mid();
+  // передняя стенка
+  const L=[],R=[];
+  for(let i=0;i<=N;i++){const t=tb*i/N,p=bowlProf(r,t);L.push([x-p,y+D*t]);R.push([x+p,y+D*t])}
+  const body=()=>{
+    c.beginPath();c.moveTo(L[0][0],L[0][1]);
+    for(let i=1;i<=N;i++)c.lineTo(L[i][0],L[i][1]);
+    c.ellipse(x,yb,rb,rb*KK,0,Math.PI,0,true);
+    for(let i=N;i>=0;i--)c.lineTo(R[i][0],R[i][1]);
+    c.ellipse(x,y,r,ry,0,0,Math.PI,false);
+    c.closePath();
+  };
+  body();c.fillStyle=lin(c,x-r,0,x+r,0,[0,'#d6ccbb',.16,'#fffaf0',.5,'#f1e8d8',.8,'#d0c3ad',1,'#a99c86']);c.fill();
+  c.save();body();c.clip();
+  c.fillStyle=lin(c,0,y,0,yb+rb*KK,[0,'rgba(90,60,25,0)',.55,'rgba(90,60,25,.1)',1,'rgba(60,35,15,.4)']);c.fillRect(x-r,y,2*r,D+rb*KK+4);
+  // голубая полоса — по дугам, как на настоящей посуде
+  const t1=.19,t2=.35,p1=bowlProf(r,t1),p2=bowlProf(r,t2),y1=y+D*t1,y2=y+D*t2,tm=(t1+t2)/2,pm=bowlProf(r,tm),ym=y+D*tm;
+  c.beginPath();c.ellipse(x,y1,p1,p1*KK,0,0,Math.PI,false);c.ellipse(x,y2,p2,p2*KK,0,Math.PI,0,true);c.closePath();
+  c.fillStyle=lin(c,x-r,0,x+r,0,[0,'#4a7fae',.18,'#9ccbea',.5,'#6aa5d3',.82,'#4577a5',1,'#335f8b']);c.fill();
+  c.strokeStyle='rgba(255,255,255,.85)';lw(c,r,.012);
+  for(const tt of [t1-.03,t2+.03]){const pp=bowlProf(r,tt);c.beginPath();c.ellipse(x,y+D*tt,pp,pp*KK,0,.02,Math.PI-.02,false);c.stroke()}
+  c.fillStyle='rgba(255,255,255,.92)';
+  for(let j=0;j<15;j++){const a=Math.PI*(1-(j+.5)/15),sn=Math.sin(a);if(sn<.2)continue;const dr=r*.026;ell(c,x+pm*Math.cos(a),ym+pm*KK*sn,Math.max(.8,dr*sn),dr);c.fill()}
+  // блик по левой стороне
+  c.beginPath();
+  for(let i=0;i<=14;i++){const t=.1+.52*i/14,p=bowlProf(r,t)*.84,w=r*.055*Math.sin(Math.PI*i/14);const px=x-p+w*.2,py=y+D*t;i?c.lineTo(px,py):c.moveTo(px,py)}
+  for(let i=14;i>=0;i--){const t=.1+.52*i/14,p=bowlProf(r,t)*.84,w=r*.055*Math.sin(Math.PI*i/14);c.lineTo(x-p+w,y+D*t)}
+  c.closePath();c.fillStyle='rgba(255,255,255,.5)';c.fill();
+  // тёплый отсвет стола справа снизу
+  c.fillStyle=lin(c,x+r*.2,0,x+r,0,[0,'rgba(255,170,90,0)',1,'rgba(255,170,90,.22)']);c.fillRect(x+r*.2,y+D*.35,r*.85,D);
+  c.restore();
+  body();c.strokeStyle='rgba(95,75,52,.45)';lw(c,r,.01);c.stroke();
+  // донце
+  c.fillStyle=lin(c,x-rb,0,x+rb,0,[0,'#b9ac96',.5,'#e8dfcd',1,'#a2957f']);ell(c,x,yb,rb*.99,rb*KK*.99);c.fill();
+  c.strokeStyle='rgba(90,70,48,.5)';lw(c,r,.012);ell(c,x,yb,rb*.99,rb*KK*.99);c.stroke();
+  // губа спереди
+  c.strokeStyle='rgba(255,255,255,.95)';lw(c,r,.022);c.beginPath();c.ellipse(x,y,r,ry,0,.04,Math.PI-.04,false);c.stroke();
+  c.strokeStyle='rgba(60,45,30,.25)';lw(c,r,.012);c.beginPath();c.ellipse(x,y+r*.012,r*.97,ry*.97,0,.12,Math.PI-.12,false);c.stroke();
+  c.restore();
+}
+function drawWhisk(c,x,y,ang,L){
+  c.save();c.translate(x,y);c.rotate(ang);
+  const bl=L*.46,w=bl*.24;
+  c.strokeStyle='#cfd5de';lw(c,L,.018);
+  for(const k of [0,.34,.68,1.0,1.3]){c.beginPath();c.ellipse(0,-bl/2,Math.max(.5,w*Math.cos(k)),bl/2,0,0,TAU);c.stroke()}
+  c.strokeStyle='rgba(255,255,255,.7)';lw(c,L,.008);c.beginPath();c.ellipse(-w*.2,-bl/2,w*.8,bl/2*.94,0,.6,2.4);c.stroke();
+  c.fillStyle=lin(c,-w*.4,0,w*.4,0,[0,'#8e949f',.5,'#eef1f6',1,'#8e949f']);rr(c,-w*.38,-bl-L*.07,w*.76,L*.09,L*.02);c.fill();
+  c.fillStyle=lin(c,-w*.5,0,w*.5,0,[0,'#d63c67',.5,'#ff7b9e',1,'#b02a50']);rr(c,-w*.42,-L,w*.84,L-bl-L*.04,w*.4);c.fill();
+  c.fillStyle='rgba(255,255,255,.4)';rr(c,-w*.24,-L+L*.04,w*.12,L*.38,w*.06);c.fill();
+  c.restore();
+}
+function drawGauge(c,x,y,h,p,lo,hi){
+  // вертикальная шкала наполнения формы: бегунок и зелёная зона
+  c.fillStyle='rgba(0,0,0,.5)';rr(c,x-9,y-h-6,18,h+12,9);c.fill();
+  c.strokeStyle='rgba(255,255,255,.3)';lw(c,1,1);rr(c,x-9,y-h-6,18,h+12,9);c.stroke();
+  const lvl=y-h*cl(p,0,1.1);
+  c.save();rr(c,x-6,y-h-3,12,h+6,6);c.clip();
+  c.fillStyle=lin(c,0,y,0,y-h,[0,'#e8b95a',1,'#ffe7a3']);c.fillRect(x-7,lvl,14,y-lvl+4);
+  c.fillStyle='rgba(70,230,140,.55)';c.fillRect(x-7,y-h*hi,14,h*(hi-lo));
+  c.fillStyle='rgba(255,255,255,.9)';c.fillRect(x-7,y-h*hi-1,14,2);c.fillRect(x-7,y-h*lo-1,14,2);
+  c.restore();
+  c.fillStyle='#fff';c.strokeStyle='rgba(0,0,0,.5)';c.lineWidth=1.2;
+  c.beginPath();c.moveTo(x+10,lvl);c.lineTo(x+22,lvl-7);c.lineTo(x+22,lvl+7);c.closePath();c.fill();c.stroke();
+}
+function drawPan(c,x,y,r,o){
+  // (x,y) — центр верхнего обода; o: {fill 0..1, col, rise 0..1, h, shadow}
+  o=o||{};const KK=.34,ry=r*KK,h=o.h||r*.36;
+  if(o.shadow!==false){softShadow(c,x,y+h+ry*.4,r*1.16,ry*1.05,.5);softShadow(c,x+r*.04,y+h+ry*.7,r*.95,ry*.55,.28)}
+  const wall=()=>{c.beginPath();c.moveTo(x-r,y);c.lineTo(x-r*1.012,y+h);c.ellipse(x,y+h,r*1.012,ry*1.012,0,Math.PI,0,true);c.lineTo(x+r,y);c.closePath()};
+  wall();c.fillStyle=lin(c,x-r,0,x+r,0,[0,'#40444e',.1,'#8d93a0',.26,'#e6eaf2',.4,'#b4bac6',.66,'#7b818e',.88,'#a9aeba',1,'#383c45']);c.fill();
+  c.save();wall();c.clip();
+  c.fillStyle='rgba(0,0,0,.2)';c.fillRect(x-r*1.1,y+h*.82,2.2*r,h*.3+ry*1.2);
+  c.fillStyle='rgba(255,255,255,.4)';c.fillRect(x-r*.6,y,r*.055,h+ry);c.fillRect(x+r*.28,y,r*.03,h+ry);
+  c.fillStyle='rgba(0,0,0,.28)';c.fillRect(x-r*1.1,y+h*.86,2.2*r,Math.max(1,h*.035));
+  c.restore();
+  // закатанный борт
+  c.fillStyle=lin(c,0,y-ry,0,y+ry,[0,'#c9ced9',.5,'#f4f7fb',1,'#9aa0ad']);ell(c,x,y,r,ry);c.fill();
+  const ix=r*.93,iy=ry*.9,iyc=y+ry*.05;
+  c.fillStyle=lin(c,0,iyc-iy,0,iyc+iy,[0,'#5a5e67',.5,'#2c2e34',1,'#1c1d21']);ell(c,x,iyc,ix,iy);c.fill();
+  c.save();ell(c,x,iyc,ix,iy);c.clip();
+  c.fillStyle='rgba(255,255,255,.13)';ell(c,x,iyc-iy*.4,ix*.94,iy*.5);c.fill();
+  const f=cl(o.fill||0,0,1.05);
+  if(f>.01){
+    const d=(1-Math.min(f,1))*h*.9;
+    c.fillStyle=o.col||'#f3d58f';ell(c,x,iyc+d,ix,iy);c.fill();
+    c.fillStyle=lin(c,x-r,iyc-iy,x+r*.5,iyc+iy,[0,'rgba(255,255,255,.34)',.6,'rgba(255,255,255,0)',1,'rgba(0,0,0,.12)']);ell(c,x,iyc+d,ix,iy);c.fill();
+    c.strokeStyle='rgba(255,255,255,.28)';lw(c,r,.012);ell(c,x,iyc+d,ix*.99,iy*.98);c.stroke();
+  }
+  c.restore();
+  if(o.rise>0){
+    const rh=o.rise*r*.13,dome=()=>{c.beginPath();c.ellipse(x,iyc,ix,iy,0,0,Math.PI,false);c.ellipse(x,iyc,ix,iy+rh,0,Math.PI,TAU,false);c.closePath()};
+    dome();c.fillStyle=o.col||'#e8b862';c.fill();
+    c.save();dome();c.clip();
+    c.fillStyle=lin(c,x-r,iyc-iy-rh,x+r,iyc+iy,[0,'rgba(255,255,255,.3)',.55,'rgba(255,255,255,0)',1,'rgba(0,0,0,.2)']);c.fillRect(x-r,iyc-iy-rh-2,2*r,2*(iy+rh)+4);
+    c.strokeStyle='rgba(90,45,10,.28)';lw(c,r,.014);c.lineCap='round';
+    for(const q of [[-.4,-.1,-.12,.05],[.12,-.2,.38,-.05],[-.1,.12,.22,.18]]){c.beginPath();c.moveTo(x+ix*q[0],iyc-iy*.5*(1+q[1])-rh*.4);c.lineTo(x+ix*q[2],iyc-iy*.4*(1+q[3])-rh*.3);c.stroke()}
+    c.lineCap='butt';c.restore();
+  }
+  c.strokeStyle='rgba(255,255,255,.92)';lw(c,r,.02);c.beginPath();c.ellipse(x,y,r,ry,0,.04,Math.PI-.04,false);c.stroke();
+  c.strokeStyle='rgba(20,22,26,.5)';lw(c,r,.014);c.beginPath();c.ellipse(x,iyc,ix,iy,0,Math.PI+.12,TAU-.12,false);c.stroke();
+}
+/* духовка */
+function drawOven(c,B,o){
+  // B:{x,y,w,h}; o:{door 0..1, temp, target, heat 0..1, p, pan:{...}|null, text, ready}
+  const x=B.x,y=B.y,w=B.w,h=B.h;
+  c.fillStyle='rgba(0,0,0,.4)';ell(c,x+w/2,y+h+h*.02,w*.56,h*.04);c.fill();
+  c.fillStyle=lin(c,x,0,x+w,0,[0,'#2b2e35',.5,'#4a4e58',1,'#25272d']);rr(c,x-w*.02,y+h*.9,w*.04,h*.1,3);c.fill();rr(c,x+w*.98,y+h*.9,w*.04,h*.1,3);c.fill();
+  c.fillStyle=lin(c,x,y,x+w,y,[0,'#30333b',.2,'#6a6f7c',.5,'#4a4e59',.8,'#6a6f7c',1,'#2b2d34']);rr(c,x,y,w,h*.96,w*.04);c.fill();
+  c.strokeStyle='rgba(255,255,255,.18)';lw(c,w,.004);rr(c,x+1,y+1,w-2,h*.96-2,w*.04);c.stroke();
+  // панель
+  c.fillStyle=lin(c,0,y,0,y+h*.2,[0,'#191b20',1,'#2a2d34']);rr(c,x+w*.03,y+h*.02,w*.94,h*.19,w*.025);c.fill();
+  const kn=(kx,ky,kr,rot,hot)=>{c.fillStyle='rgba(0,0,0,.5)';ell(c,kx,ky+kr*.14,kr*1.05,kr*1.05);c.fill();c.fillStyle=rad(c,kx-kr*.3,ky-kr*.3,kr*.1,kr*1.1,[0,'#eef1f6',.6,'#9aa0ab',1,'#5b606b']);ell(c,kx,ky,kr,kr);c.fill();c.strokeStyle=hot?'#ff8a3c':'#20232a';lw(c,kr,.18);c.beginPath();c.moveTo(kx+Math.cos(rot)*kr*.2,ky+Math.sin(rot)*kr*.2);c.lineTo(kx+Math.cos(rot)*kr*.86,ky+Math.sin(rot)*kr*.86);c.stroke()};
+  const t01=cl(((o.target||0)-50)/200,0,1);
+  kn(x+w*.17,y+h*.115,w*.07,-2.4+t01*4.7,o.heat>.2);kn(x+w*.83,y+h*.115,w*.045,-.8,false);kn(x+w*.725,y+h*.115,w*.045,.4,false);
+  c.fillStyle='#050505';rr(c,x+w*.3,y+h*.05,w*.36,h*.12,w*.015);c.fill();
+  c.fillStyle=o.ready?'#6bff9c':'#ff9a3c';c.font='800 '+Math.round(h*.085)+'px ui-monospace,Menlo,Consolas,monospace';c.textAlign='center';c.textBaseline='middle';
+  c.fillText(o.text||(Math.round(o.temp||0)+'°'),x+w*.48,y+h*.115);
+  // полость
+  const dx0=x+w*.06,dx1=x+w*.94,dyT=y+h*.24,dyB=y+h*.94,H=dyB-dyT,door=cl(o.door||0,0,1);
+  const heat=cl(o.heat||0,0,1);
+  const cav=()=>{
+    c.fillStyle=lin(c,0,dyT,0,dyB,[0,'#120a06',1,'#2a1409']);c.fillRect(dx0,dyT,dx1-dx0,H);
+    c.fillStyle=rad(c,(dx0+dx1)/2,dyT+H*.5,2,w*.6,[0,'rgba(255,120,30,'+(.3*heat)+')',1,'rgba(255,90,10,0)']);c.fillRect(dx0,dyT,dx1-dx0,H);
+    c.strokeStyle='rgba(255,'+(90+heat*60)+',30,'+(.25+.75*heat)+')';lw(c,w,.012);c.beginPath();c.moveTo(dx0+w*.04,dyT+H*.08);c.lineTo(dx1-w*.04,dyT+H*.08);c.moveTo(dx0+w*.04,dyB-H*.06);c.lineTo(dx1-w*.04,dyB-H*.06);c.stroke();
+    c.strokeStyle='rgba(180,185,195,.55)';lw(c,w,.006);for(const q of [.42,.7]){c.beginPath();c.moveTo(dx0+w*.02,dyT+H*q);c.lineTo(dx1-w*.02,dyT+H*q);c.stroke();for(let i=1;i<14;i++){const xx=dx0+(dx1-dx0)*i/14;c.beginPath();c.moveTo(xx,dyT+H*q);c.lineTo(xx,dyT+H*q+H*.012);c.stroke()}}
+    if(o.pan){const pr=o.pan.r||(dx1-dx0)*.3;drawPan(c,(dx0+dx1)/2,dyT+H*.58,pr,{fill:o.pan.fill,col:o.pan.col,rise:o.pan.rise,h:pr*.28,shadow:false})}
+  };
+  // дверца: четырёхугольник, который «откидывается» вниз
+  const th=door*Math.PI/2*.94,cs=Math.cos(th),sn=Math.sin(th);
+  const BLx=dx0,BRx=dx1,By=dyB,Ty=By-H*cs+H*sn*.3,sc=1+.12*sn,mid=(dx0+dx1)/2,hw=(dx1-dx0)/2*sc;
+  const TL={x:mid-hw,y:Ty},TR={x:mid+hw,y:Ty},BL={x:BLx,y:By},BR={x:BRx,y:By};
+  const P=(u,v)=>{const bx=BL.x+(BR.x-BL.x)*u,by=BL.y+(BR.y-BL.y)*u,tx=TL.x+(TR.x-TL.x)*u,ty=TL.y+(TR.y-TL.y)*u;return{x:bx+(tx-bx)*v,y:by+(ty-by)*v}};
+  if(door>.02){cav()}
+  const quad=(u0,v0,u1,v1)=>{const a=P(u0,v0),b=P(u1,v0),d=P(u1,v1),e=P(u0,v1);c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.lineTo(d.x,d.y);c.lineTo(e.x,e.y);c.closePath()};
+  quad(0,0,1,1);c.fillStyle=lin(c,0,Math.min(Ty,dyT),0,By,[0,'#1b1d22',1,'#2d3037']);c.fill();c.strokeStyle='rgba(255,255,255,.14)';lw(c,w,.004);c.stroke();
+  const wA=P(.09,.12),wB=P(.91,.12),wC=P(.91,.68),wD=P(.09,.68);
+  c.save();c.beginPath();c.moveTo(wA.x,wA.y);c.lineTo(wB.x,wB.y);c.lineTo(wC.x,wC.y);c.lineTo(wD.x,wD.y);c.closePath();c.clip();
+  if(door<=.02){cav()}else{c.fillStyle='#0c0605';c.fillRect(dx0-5,Math.min(Ty,dyT)-5,w,H+30)}
+  c.fillStyle=lin(c,wA.x,wD.y,wC.x,wA.y,[0,'rgba(255,255,255,0)',.4,'rgba(255,255,255,.13)',.55,'rgba(255,255,255,0)',1,'rgba(255,255,255,.05)']);c.fillRect(dx0-5,Math.min(Ty,dyT)-5,w,H+30);
+  c.restore();
+  c.strokeStyle='#0a0a0c';lw(c,w,.012);c.beginPath();c.moveTo(wA.x,wA.y);c.lineTo(wB.x,wB.y);c.lineTo(wC.x,wC.y);c.lineTo(wD.x,wD.y);c.closePath();c.stroke();
+  const h1=P(.14,.84),h2=P(.86,.84);c.strokeStyle=lin(c,h1.x,0,h2.x,0,[0,'#8e949f',.5,'#f4f6fa',1,'#8e949f']);c.lineWidth=Math.max(3,w*.022);c.lineCap='round';c.beginPath();c.moveTo(h1.x,h1.y);c.lineTo(h2.x,h2.y);c.stroke();c.lineCap='butt';
+  c.textAlign='left';c.textBaseline='alphabetic';
+}
+/* подписи, листок с рецептом, полоски прогресса */
+function fontK(sz,wt){return (wt||800)+' '+Math.round(sz)+'px "Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif'}
+function caption(c,x,y,text,sz,al){
+  c.save();c.font=fontK(sz,800);c.textAlign='center';c.textBaseline='middle';
+  const w=c.measureText(text).width+sz*1.1,h=sz*1.6;c.globalAlpha=(al===undefined?1:al);
+  c.fillStyle='rgba(18,8,14,.78)';rr(c,x-w/2,y-h/2,w,h,h/2);c.fill();
+  c.fillStyle='#fff3ea';c.fillText(text,x,y+sz*.04);c.restore();
+}
+function note(c,x,y,w,title,lines,U){
+  // листок на стене: lines=[{t,done}]
+  const lh=17*U,h=lh*(lines.length+1.7)+16*U;
+  c.save();c.translate(x,y);c.rotate(.035);
+  c.fillStyle='rgba(0,0,0,.35)';rr(c,4,6,w,h,4);c.fill();
+  c.fillStyle=lin(c,0,0,0,h,[0,'#fff6c8',1,'#f6e49a']);rr(c,0,0,w,h,4);c.fill();
+  c.fillStyle='#e0455f';ell(c,w/2,5*U,5*U,5*U);c.fill();c.fillStyle='rgba(255,255,255,.55)';ell(c,w/2-1.5*U,3.5*U,1.6*U,1.6*U);c.fill();
+  c.fillStyle='#5a2a14';c.font=fontK(12.5*U,900);c.textAlign='left';c.textBaseline='middle';c.fillText(title,10*U,22*U);
+  c.font=fontK(12*U,700);
+  lines.forEach((l,i)=>{const yy=22*U+lh*(i+1.15);c.fillStyle=l.done?'#2d8a4e':'#6b3a1e';c.fillText((l.done?'✓ ':'• ')+l.t,10*U,yy);if(l.done){c.strokeStyle='rgba(45,138,78,.7)';lw(c,U,1.4);const tw=c.measureText('✓ '+l.t).width;c.beginPath();c.moveTo(10*U,yy);c.lineTo(10*U+tw,yy);c.stroke()}});
+  c.restore();return h;
+}
+function pill(c,x,y,w,h,p,col,label){
+  c.fillStyle='rgba(0,0,0,.5)';rr(c,x-w/2,y-h/2,w,h,h/2);c.fill();
+  c.save();rr(c,x-w/2,y-h/2,w,h,h/2);c.clip();c.fillStyle=col||lin(c,x-w/2,0,x+w/2,0,[0,'#fb365d',1,'#ffc94d']);c.fillRect(x-w/2,y-h/2,w*cl(p,0,1),h);c.restore();
+  c.strokeStyle='rgba(255,255,255,.35)';lw(c,1,1);rr(c,x-w/2,y-h/2,w,h,h/2);c.stroke();
+  if(label){c.fillStyle='#fff';c.font=fontK(h*.62,900);c.textAlign='center';c.textBaseline='middle';c.fillText(label,x,y+h*.03)}
+}
+
+
+/* ---------- Торт: те же форма, цвета и подставка, что в редакторе ----------
+   Подставку и ярусы с глазурью рисует сам редактор (window.__cake.draw), кухня только кладёт готовые картинки на сцену.
+   Корж до глазури рисуется здесь, с тем же наклоном и теми же пропорциями. */
+const CSY=.64;
+const TS_DEF={1:{r:[1],h:[.38]},2:{r:[1,.67],h:[.34,.31]},3:{r:[1,.72,.5],h:[.31,.29,.27]}};
+function cakeApi(){const a=window.__cake;return a&&typeof a.draw==='function'&&a.shape?a:null}
+function tshape(n){const a=cakeApi(),t=a&&a.shape.tiers?a.shape.tiers[n]:null;return t||TS_DEF[n]||TS_DEF[1]}
+function flavCol(f){const a=cakeApi(),F=a&&a.shape.flavors?a.shape.flavors[f]:null;return F&&F.glaze?F.glaze[1]:(GLZ[f]?GLZ[f].col:'#c8566f')}
+function uiKey(){return (document.documentElement.getAttribute('data-ui')||'')+'|'+(window.__horror?1:0)}
+
+/* раскладка торта на сцене: R — радиус нижнего яруса, bot — нижний край подставки */
+function cakeLay(n,R,cx,bot){
+  const T=tshape(n),H0=R*T.h[0],cy=bot-H0-.762*R,tiers=[];
+  let y=cy;
+  for(let i=0;i<n;i++){
+    const r=R*T.r[i],h=R*T.h[i];if(i>0)y-=h;
+    const rn=srnd(40+i*7),nd=cl(Math.round(r/9),6,11),drips=[];
+    for(let j=0;j<nd;j++){drips.push({a:Math.PI*(.07+.86*(j+.5+(rn()-.5)*.55)/nd),w:Math.PI*.86/nd*(.3+.2*rn()),k:.45+.55*rn()})}
+    tiers.push({r:r,h:h,y:y,drips:drips});
+  }
+  const tp=tiers[n-1];
+  return {n:n,R:R,cx:cx,cy:cy,tiers:tiers,plateY:cy+H0+R*.04,plateR:R*1.13,bottom:bot,top:tp.y-CSY*tp.r};
+}
+function partBox(L,part){
+  const R=L.R,T=L.tiers,m=4;
+  if(part==='plate')return{x0:L.cx-R*1.14-26,x1:L.cx+R*1.14+26,y0:L.plateY-R*.64-8,y1:L.bottom+42};
+  if(typeof part==='string'){const g=T[+part.slice(1)-1];return{x0:L.cx-g.r-m,x1:L.cx+g.r+m,y0:g.y-g.r*CSY-m,y1:g.y+g.r*CSY+m}}
+  const g=T[part];return{x0:L.cx-g.r-m,x1:L.cx+g.r+m,y0:g.y-g.r*CSY-m,y1:g.y+g.h+g.r*CSY+m};
+}
+/* готовые картинки частей торта (кэш одной конфигурации: размер + вкус + тема) */
+const cakeC={key:'',m:{}};
+function cakeImg(L,flavor,part){
+  const d=LAY.dpr,key=[L.n,Math.round(L.R*4),Math.round(L.cx),Math.round(L.cy),d,flavor,uiKey()].join('|');
+  if(cakeC.key!==key){cakeC.key=key;cakeC.m={}}
+  let e=cakeC.m[part];if(e)return e;
+  const b=partBox(L,part),x0=Math.floor(b.x0),y0=Math.floor(b.y0),w=Math.ceil(b.x1)-x0,h=Math.ceil(b.y1)-y0;
+  const cv=document.createElement('canvas');cv.width=Math.max(1,Math.round(w*d));cv.height=Math.max(1,Math.round(h*d));
+  const c=cv.getContext('2d');c.setTransform(d,0,0,d,0,0);
+  const a=cakeApi();if(a){try{a.draw(c,L.cx-x0,L.cy-y0,L.R,L.n,flavor,{part:part})}catch(err){}}
+  e={cv:cv,x:x0,y:y0,w:w,h:h};cakeC.m[part]=e;return e;
+}
+function blit(c,e){c.drawImage(e.cv,e.x,e.y,e.w,e.h)}
+
+/* корж до глазури: без полосок, стенка и верх как у яруса торта */
+const SPONGE={
+  gold:{top:['#f3c978','#d9964a'],side:['#f2d492','#e4b86e','#c8995c'],rim:'rgba(150,84,26,.38)'},
+  dark:{top:['#9a5c2c','#66381a'],side:['#cf9f66','#b07e48','#8c6236'],rim:'rgba(50,22,6,.5)'},
+  raw:{top:['#f7e3ab','#ecd18d'],side:['#f9ecc4','#f0dba5','#dcc58a'],rim:'rgba(170,130,60,.3)'}
+};
+function drawSponge(c,x,y,r,h,o){
+  // (x,y) — центр верхнего эллипса, h — высота стенки; o:{q:'gold'|'dark'|'raw', shadow}
+  o=o||{};const ry=r*CSY,S=SPONGE[o.q||'gold'];
+  if(o.shadow)softShadow(c,x,y+h+ry*.15,r*1.07,ry*1.06,o.shadow);
+  c.beginPath();c.moveTo(x-r,y);c.lineTo(x-r,y+h);c.ellipse(x,y+h,r,ry,0,Math.PI,0,true);c.lineTo(x+r,y);c.closePath();
+  c.fillStyle=lin(c,x-r,0,x+r,0,[0,S.side[2],.2,S.side[0],.5,S.side[1],.82,S.side[1],1,S.side[2]]);c.fill();
+  c.save();c.clip();
+  c.fillStyle=lin(c,0,y,0,y+h+ry,[0,'rgba(0,0,0,0)',.55,'rgba(0,0,0,0)',1,'rgba(70,30,4,.3)']);c.fillRect(x-r-2,y,2*r+4,h+ry+3);
+  const rn=srnd(Math.round(r)*3+1);c.fillStyle='rgba(120,70,20,.2)';
+  for(let i=0,m=Math.round(r*.5);i<m;i++){c.fillRect(x-r+rn()*2*r,y+ry*.9+rn()*Math.max(1,h-ry*.4),1.3,1.3)}
+  c.restore();
+  c.fillStyle=lin(c,x-r,y-ry,x+r,y+ry,[0,S.top[0],1,S.top[1]]);ell(c,x,y,r,ry);c.fill();
+  c.strokeStyle=S.rim;lw(c,r,.01);ell(c,x,y,r*.985,ry*.985);c.stroke();
+  c.strokeStyle='rgba(255,255,255,.26)';lw(c,r,.012);c.beginPath();c.ellipse(x,y,r*.93,ry*.91,0,Math.PI*1.08,Math.PI*1.72);c.stroke();
+}
+
+/* глазурь «стекает»: область, уже закрытая глазурью, для яруса i при готовности u (0..1) */
+function glazeEdge(L,i,u){
+  const T=L.tiers[i],x=L.cx,r=T.r,ry=r*CSY,y=T.y,h=T.h,e=ease(cl((u-.34)/.66,0,1)),N=110,ds=T.drips,pts=[];
+  const base=1.04*Math.pow(e,1.5),ex=.55*Math.sin(Math.PI*e);
+  for(let k=0;k<=N;k++){
+    const th=Math.PI*k/N;let b=0;
+    for(let j=0;j<ds.length;j++){const q=ds[j],s=(th-q.a)/q.w;if(s>-1&&s<1){const v=1-s*s,z=q.k*v*v;if(z>b)b=z}}
+    pts.push([x+r*Math.cos(th),y+ry*Math.sin(th)+h*(base+b*ex)]);
+  }
+  return pts;
+}
+function glazeClip(c,L,i,u){
+  const T=L.tiers[i],x=L.cx,r=T.r,ry=r*CSY,y=T.y,t=ease(cl(u/.5,0,1));
+  c.beginPath();
+  if(t>.002){const rx=r*1.03*t;c.moveTo(x+rx,y);c.ellipse(x,y,rx,ry*1.03*t,0,0,TAU)}
+  if(u>.34){
+    const pts=glazeEdge(L,i,u),N=pts.length-1;
+    c.moveTo(x-r,y);
+    for(let k=0;k<=N;k++){const th=Math.PI*(1-k/N);c.lineTo(x+r*Math.cos(th),y+ry*Math.sin(th))}
+    for(let k=0;k<=N;k++)c.lineTo(pts[k][0],pts[k][1]);
+    c.closePath();
+  }
+}
+/* ярус i, закрытый глазурью на долю u: картинка яруса из редактора под вырезом */
+function drawGlazed(c,L,i,flavor,u){
+  if(u<=0)return;
+  const img=cakeImg(L,flavor,i);
+  if(u>=1){blit(c,img);return}
+  c.save();glazeClip(c,L,i,u);c.clip();blit(c,img);c.restore();
+  if(u>.34){
+    const pts=glazeEdge(L,i,u);
+    c.save();c.strokeStyle='rgba(255,255,255,.2)';c.lineWidth=1.6;c.lineJoin='round';c.beginPath();
+    for(let k=0;k<pts.length;k++)k?c.lineTo(pts[k][0],pts[k][1]):c.moveTo(pts[k][0],pts[k][1]);
+    c.stroke();c.restore();
+  }
+}
+
+/* картинки на карточках выбора ярусов: тот же торт, что в редакторе (вишнёвый — вкус по умолчанию) */
+function drawCards(){
+  if(!cakeApi())return;
+  const d=Math.min(window.devicePixelRatio||1,2),ext=n=>{const T=tshape(n);let up=CSY*T.r[n-1];for(let j=1;j<n;j++)up+=T.h[j];return{up:up,dn:T.h[0]+.762}};
+  for(let i=0;i<kCards.length;i++){
+    const b=kCards[i],cv=b.querySelector('canvas');if(!cv)continue;
+    const r=cv.getBoundingClientRect(),w=Math.round(r.width),h=Math.round(r.height);if(w<24||h<24)continue;
+    const key=w+'x'+h+'@'+d+'|'+uiKey();if(cv._k===key)continue;cv._k=key;
+    cv.width=Math.round(w*d);cv.height=Math.round(h*d);
+    const c=cv.getContext('2d');c.setTransform(d,0,0,d,0,0);c.clearRect(0,0,w,h);
+    const e3=ext(3),R=Math.min((h-34)/(e3.up+e3.dn),(w-8)/2.4),n=+b.dataset.n,e=ext(n);
+    try{window.__cake.draw(c,w/2,h-30-e.dn*R,R,n,'cherry')}catch(err){}
+  }
+}
+
+
+/* ---------- Кухня: состояние, интерфейс, раскладка ---------- */
+const kOv=document.getElementById('kitchen'),kCv=document.getElementById('kCv'),kx=kCv.getContext('2d');
+const kClose=document.getElementById('kClose'),kTitle=document.getElementById('kTitle'),kSub=document.getElementById('kSub'),kDots=document.getElementById('kDots'),kBub=document.getElementById('kBubble'),kSay=document.getElementById('kSay'),kDock=document.getElementById('kDock'),kPickEl=document.getElementById('kPick'),kGo=document.getElementById('kGo'),kTop=kOv.querySelector('.ktop'),kHud=kOv.querySelector('.khud');
+const kCards=Array.prototype.slice.call(kOv.querySelectorAll('.kcard'));
+const REQ=['flour','eggs','sugar','butter','milk','powder'],IDS=Object.keys(ING);
+const GLZ={cherry:{col:'#c8566f',name:'Вишня',em:'🍒'},choc:{col:'#6a3b2a',name:'Шоколад',em:'🍫'},vanilla:{col:'#f4e2bd',name:'Ваниль',em:'🍦'},mint:{col:'#74c9b6',name:'Мята',em:'🌿'},caramel:{col:'#d9a04a',name:'Карамель',em:'🍮'}};
+const GLZ_ORDER=['cherry','choc','vanilla','mint','caramel'];
+const RATIO={1:[1],2:[1,.67],3:[1,.72,.5]};
+const BAKE_BASE=9,B_RAW=.75,B_BURN=1.08,B_MAX=1.45;
+const TIER_PH=['ing','mix','pan','oven','cool'];
+const JOKES={
+  salt:['Соль в торт? Я тебя сейчас… нет, не буду. Убери.','Солёный бисквит — это уже не торт, а сухарь.'],
+  garlic:['Чеснок?! Это торт, а не шаурма.','Никакого чеснока. Я не хочу, чтобы торт «дышал».'],
+  ketchup:['Кетчуп… Нет. Нет-нет-нет. Убери.','Ты серьёзно хочешь кетчуп в бисквит?'],
+  fish:['Рыбка?! Отпусти её, она ещё живая.','Селёдка под шубой — это не сюда.']
+};
+const PRAISE={
+  flour:'Мука — основа основ. Просеяла!',
+  eggs:'Яйца разбила. Скорлупу почти всю достала.',
+  sugar:'Сахар! Но не слишком много, я слежу.',
+  butter:'Масло мягкое. Как моё сердце. Шучу, не мягкая я.',
+  milk:'Молочко влила. Тесто подобрело.',
+  powder:'Разрыхлитель — чтобы торт был пышным, а не как блин.'
+};
+const TITLES={pick:['Кухня','Сколько ярусов печём?'],ing:['Ингредиенты','Собери всё из рецепта'],mix:['Замес','Взбей тесто до гладкости'],pan:['В форму','Налей тесто в форму'],oven:['Духовка','Раскали до 180° и выпеки'],cool:['Остужаем','Дай коржу остыть'],assemble:['Сборка','Ставь ярусы друг на друга'],glaze:['Глазурь','Выбери вкус и полей торт'],done:['Готово!','Торт испечён']};
+const HINTS={
+  pick:'Выбирай, сколько ярусов. Каждый я испеку отдельно. Не то чтобы мне было лень.',
+  ing:'Бери только то, что написано в рецепте. Всё остальное — не трогай.',
+  mix:'Води пальцем по кругу в миске — или держи «Помешать».',
+  pan:'Держи «Лить» и отпусти в зелёной зоне.',
+  cool:'Помаши — пусть остынет, а то поплывёт.',
+  assemble:'Ставь ярусы друг на друга: от большого к маленькому.',
+  glaze:'Выбери вкус глазури и держи «Лить».',
+  done:'Готово. Ну… неплохо. Не то чтобы я старалась.'
+};
+
+let K=null,loopId=0,lastT=0,bubTimer=0,kBtns={},ingBtns=[],lastFocus=null,P={};
+const LAY={W:0,H:0,dpr:1,U:1,top:56,dockTop:0,dockH:68,st:0,sb:0,cY:0,wallH:0};
+const bgC={cv:null,key:''};
+
+function newSession(){
+  return {phase:'pick',n:1,tier:0,t:0,add:{},pend:{},blobs:[],wrong:0,order:IDS.slice(),hov:null,
+    mix:0,stirHold:false,stirring:false,mixAng:0,whisk:{ph:0,x:0,y:0,sp:0},
+    pour:0,pouring:false,tilt:0,pourT:0,
+    oT:25,oTarget:140,door:0,doorGoal:0,panIn:0,oAnim:'idle',oLock:false,bake:0,burnt:0,note:0,
+    cool:0,coolT:0,q:'gold',
+    layers:[],placed:0,drop:null,
+    glz:{p:0,pouring:false,flavor:'cherry',t:0,done:false},
+    fly:[],parts:[],shake:{},timers:[],leaving:false,closing:false,confirmed:false,ptr:null,doneT:0,fin:0};
+}
+function later(ms,fn){
+  const k=K;if(!k)return;
+  const id=setTimeout(()=>{const i=k.timers.indexOf(id);if(i>=0)k.timers.splice(i,1);if(K===k&&!k.closing)fn()},ms);
+  k.timers.push(id);
+}
+function shuffle(a,seed){const r=srnd(seed),o=a.slice();for(let i=o.length-1;i>0;i--){const j=Math.floor(r()*(i+1)),t=o[i];o[i]=o[j];o[j]=t}return o}
+function snd(n,v,r){try{if(window.__cake&&window.__cake.play)window.__cake.play(n,v,r)}catch(e){}}
+let lastSpin=0,spinAlt=0;
+function sndSpin(){const t=performance.now();if(t-lastSpin<130)return;lastSpin=t;spinAlt^=1;snd(spinAlt?'spin1':'spin2',.22,.96+Math.random()*.1)}
+function buzz(ms){try{if(navigator.vibrate)navigator.vibrate(ms||12)}catch(e){}}
+
+/* ---- слова и кнопки ---- */
+function say(text,kind,ttl){
+  kSay.textContent=text||'';kBub.hidden=!text;
+  kBub.classList.remove('good','bad','pop');if(kind)kBub.classList.add(kind);
+  void kBub.offsetWidth;kBub.classList.add('pop');
+  clearTimeout(bubTimer);bubTimer=0;
+  if(ttl&&K){const k=K,ph=k.phase;bubTimer=setTimeout(()=>{if(K===k&&k.phase===ph&&!k.leaving)hint()},ttl)}
+}
+function hintText(){
+  if(!K)return '';const ph=K.phase;
+  if(ph==='ing'){const left=REQ.filter(id=>!K.add[id]).length;return left?HINTS.ing+(left<6?' Осталось: '+left+'.':''):'Всё на месте! Жми «Замесить».'}
+  if(ph==='oven'){
+    if(K.oAnim==='bake')return 'Следи за шкалой. Вынимай, когда она зелёная!';
+    if(K.oAnim==='idle')return 'Выставь 180° и ставь форму. Жарче — быстрее, но легко сжечь.';
+    return '';
+  }
+  return HINTS[ph]||'';
+}
+function hint(){const t=hintText();if(t)say(t,'');else{kBub.hidden=true}}
+function holdable(b,start,end){
+  let on=false;
+  const go=e=>{if(b.disabled||on)return;on=true;b.classList.add('kdown');try{if(e.pointerId!=null&&b.setPointerCapture)b.setPointerCapture(e.pointerId)}catch(_){}start()};
+  const stop=()=>{if(!on)return;on=false;b.classList.remove('kdown');end()};
+  b.addEventListener('pointerdown',e=>{e.preventDefault();go(e)});
+  b.addEventListener('pointerup',stop);b.addEventListener('pointercancel',stop);b.addEventListener('lostpointercapture',stop);
+  b.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse')stop()});
+  b.addEventListener('keydown',e=>{if((e.key===' '||e.key==='Enter')&&!e.repeat){e.preventDefault();go(e)}});
+  b.addEventListener('keyup',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();stop()}});
+  b.addEventListener('blur',stop);b.addEventListener('contextmenu',e=>e.preventDefault());
+}
+function setDock(list){
+  kDock.textContent='';kBtns={};
+  for(const d of list){
+    if(d.node){kDock.appendChild(d.node);continue}
+    const b=document.createElement('button');b.type='button';b.className='kb'+(d.cls?' '+d.cls:'')+(d.hold?' hold':'');b.textContent=d.text;
+    if(d.id)kBtns[d.id]=b;if(d.disabled)b.disabled=true;if(d.aria)b.setAttribute('aria-label',d.aria);
+    if(d.hold)holdable(b,d.hold[0],d.hold[1]);else b.addEventListener('click',d.on);
+    kDock.appendChild(b);
+  }
+  measure();place();
+}
+function hud(){
+  if(!K)return;const ph=K.phase,t=TITLES[ph]||['Кухня',''];
+  kTitle.textContent=t[0];
+  const cp=!!LAY.compact,tierInfo=TIER_PH.indexOf(ph)>=0&&K.n>1?'Ярус '+(K.tier+1)+' из '+K.n:'';
+  kSub.textContent=tierInfo?(cp?tierInfo:tierInfo+' · '+t[1]):(cp?'':t[1]);
+  kDots.textContent='';
+  if(ph==='pick')return;
+  const inTier=TIER_PH.indexOf(ph)>=0,after=ph==='assemble'||ph==='glaze'||ph==='done';
+  for(let i=0;i<K.n+2;i++){
+    const li=document.createElement('li');let st='';
+    if(i<K.n)st=(after||(inTier&&i<K.tier))?'done':(inTier&&i===K.tier?'on':'');
+    else if(i===K.n)st=ph==='assemble'?'on':(ph==='glaze'||ph==='done')?'done':'';
+    else st=ph==='glaze'?'on':ph==='done'?'done':'';
+    if(st)li.className=st;kDots.appendChild(li);
+  }
+}
+
+/* ---- раскладка ---- */
+function measure(){
+  const t=kTop.getBoundingClientRect(),d=kDock.getBoundingClientRect(),o=kOv.getBoundingClientRect();
+  LAY.top=Math.max(48,Math.round(t.bottom-o.top));
+  LAY.dockTop=Math.round(d.top-o.top);LAY.dockH=Math.round(d.height);
+}
+function sizeCanvas(){
+  const r=kOv.getBoundingClientRect();
+  const W=Math.max(200,Math.round(r.width||window.innerWidth)),H=Math.max(200,Math.round(r.height||window.innerHeight));
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  // низкий широкий экран (телефон на боку): облачко уезжает в шапку, кнопки и шапка компактнее
+  const cp=H<=470&&W>=H*1.25;
+  if(cp!==!!LAY.compact){LAY.compact=cp;kOv.classList.toggle('kcompact',cp)}
+  if(W!==LAY.W||H!==LAY.H||dpr!==LAY.dpr||!kCv.width){LAY.W=W;LAY.H=H;LAY.dpr=dpr;kCv.width=Math.round(W*dpr);kCv.height=Math.round(H*dpr)}
+  LAY.U=cl(Math.min(W/420,H/760),.62,1.45);
+  measure();place();drawCards();
+}
+function place(){
+  const W=LAY.W,H=LAY.H,n=K?K.n:1,tk=K?K.tier:0,cp=!!LAY.compact;
+  if(!W||!H)return;
+  const st=cp?Math.max(LAY.top+4,68):LAY.top+(W<520?84:64),sb=Math.max(st+(cp?120:130),(LAY.dockTop||H-70)-6);
+  const cY=Math.round(st+cl((H-st-78)*.25,cp?52:64,200)),wallH=cY-st;
+  LAY.st=st;LAY.sb=sb;LAY.cY=cY;LAY.wallH=wallH;
+  const wh=cl(wallH-18,cp?34:60,150),ww=cp?Math.round(wh*1.5):cl(W*.27,86,200);
+  P.win={x:Math.round(W>900?W*.14:W*.05+6),y:Math.round(st+(wallH-wh)/2)-2,w:ww,h:wh};
+  P.lamp={x:Math.round(W*.5),y:Math.round(st+wallH*.2)};
+  const nw=cl(W*.36,128,210);
+  P.note={x:Math.round(W>900?W*.86-nw:W-nw-12),y:st+4,w:nw,show:wallH>=118&&H>=520};
+  // полка с продуктами: размер ограничен и шириной, и высотой (под полкой должна влезть миска)
+  const availH=sb-cY;
+  const shelfFor=cols=>{const rows=IDS.length/cols,cw=Math.min(W-20,1100)/cols,kk=3.25+2.6*(rows-1);let s0=cl(cw*.4,cp?16:20,52);s0=Math.min(s0,Math.max(14,(availH-70)/kk));return{cols:cols,rows:rows,cw:cw,s:s0}};
+  const pref=W>=700?10:5;let SH=shelfFor(pref);
+  if(SH.s<24){const alt=shelfFor(pref===10?5:10);if(alt.s>SH.s*1.15)SH=alt}
+  const cols=SH.cols,rows=SH.rows,cw=SH.cw,s=SH.s;
+  P.shelf={cols:cols,rows:rows,cw:cw,s:s,x0:(W-cw*cols)/2,y0:cY+s*1.5+6,rh:s*2.6};
+  P.slots=IDS.map((id,i)=>({x:P.shelf.x0+(i%cols+.5)*cw,y:P.shelf.y0+Math.floor(i/cols)*P.shelf.rh}));
+  const shB=P.shelf.y0+(rows-1)*P.shelf.rh+s*1.75;
+  const br=cl(Math.min(W*.3,(sb-shB-12)/1.3),cp?30:40,170);
+  P.bowl={x:W/2,y:Math.round(shB+12+br*.32),r:br};
+  const mf=cp?.5:.6,mr=cl(Math.min(W*.36,(sb-st-30)/1.5,(sb-st)*(1-mf)-31),44,200);
+  P.mixBowl={x:W/2,y:Math.round(st+(sb-st)*mf),r:mr};
+  // форма
+  const pr0=cl(Math.min(W*.26,(sb-cY)*.3),cp?34:48,150),ratio=(RATIO[n]||[1])[tk]||1,pr=pr0*ratio;
+  P.pr0=pr0;P.pr=pr;
+  P.pan={x:Math.round(Math.max(W*.4,pr0+58)),y:Math.round(cY+(sb-cY)*.62),r:pr};
+  P.pBowlR=pr0*.78;
+  // духовка
+  const underH=pr*1.1+46;
+  let oh=Math.min(sb-st-4-underH,cl(W*.8,240,560)*.86);oh=Math.max(cp?84:150,oh);
+  const ow=Math.min(oh/.86,W*.92);
+  P.oven={x:Math.round((W-ow)/2),y:Math.round(sb-underH-oh),w:ow,h:oh};
+  P.ovFront={x:W/2,y:Math.round(P.oven.y+oh+pr*.4+6),r:pr};
+  P.bar={x:W/2,y:Math.round(P.oven.y+oh+pr*.4+6+pr*.7+24),w:Math.min(ow,320),h:20};
+  // остывание: решётка с коржом
+  P.rack={x:W/2,y:Math.round(cY+(sb-cY)*.48),r:pr};
+  // торт на подставке (сборка, глазурь, готово): та же форма и подставка, что в редакторе
+  const bot=sb-26,Rk=cl(Math.min(W*.31,(bot-st)/2.65,(bot-cY)/1.95),36,240);
+  P.cake=cakeLay(n,Rk,W/2,bot);
+  P.stand={x:W/2,y:P.cake.plateY,r:P.cake.plateR};
+  placeIng();
+}
+function ensureIngBtns(){
+  if(ingBtns.length)return;
+  for(let i=0;i<IDS.length;i++){
+    const b=document.createElement('button');b.type='button';b.className='king';b.hidden=true;
+    b.addEventListener('click',()=>{if(b.dataset.id)pickIng(b.dataset.id)});
+    b.addEventListener('pointerenter',()=>{if(K)K.hov=b.dataset.id||null});
+    b.addEventListener('pointerleave',()=>{if(K)K.hov=null});
+    b.addEventListener('focus',()=>{if(K)K.hov=b.dataset.id||null});
+    b.addEventListener('blur',()=>{if(K)K.hov=null});
+    kHud.appendChild(b);ingBtns.push(b);
+  }
+}
+function placeIng(){
+  if(!ingBtns.length||!P.shelf)return;
+  const s=P.shelf,show=!!K&&K.phase==='ing'&&!K.leaving&&!K.closing;
+  for(let i=0;i<ingBtns.length;i++){
+    const b=ingBtns[i];b.hidden=!show;if(!show)continue;
+    const id=K.order[i],sl=P.slots[i],w=s.cw-6,h=s.rh-4;
+    b.dataset.id=id;b.setAttribute('aria-label',ING[id].name+(K.add[id]?' — уже в миске':''));
+    b.style.left=Math.round(sl.x-w/2)+'px';b.style.top=Math.round(sl.y-s.s*1.25)+'px';b.style.width=Math.round(w)+'px';b.style.height=Math.round(h)+'px';
+  }
+}
+
+
+/* ---------- Кухня: ход игры ---------- */
+function burst(x,y,n,col,o){
+  o=o||{};if(!K)return;
+  for(let i=0;i<n;i++){
+    const a=Math.random()*TAU,sp=(o.sp||120)*(.4+Math.random()*.8);
+    K.parts.push({x:x,y:y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-(o.up||60),g:o.g===undefined?500:o.g,age:0,life:(o.life||.6)*(.7+Math.random()*.6),r:(o.r||3)*(.6+Math.random()*.8),col:Array.isArray(col)?col[i%col.length]:col,k:o.k||'dot'});
+  }
+  if(K.parts.length>260)K.parts.splice(0,K.parts.length-260);
+}
+function selectCard(n){
+  if(!K)return;K.n=n;
+  kCards.forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.n===n)));kGo.disabled=false;
+}
+function go(ph){
+  const k=K;if(!k)return;
+  k.phase=ph;k.leaving=false;k.busy=false;clearTimeout(bubTimer);bubTimer=0;
+  dockFor(ph);hud();hint();placeIng();
+  if(ph!=='pick')keepFocus(ph);
+  if(ph==='done'){
+    const s=P.stand;burst(s.x,s.y-s.r*.8,46,['#ff8fb1','#ffd35a','#9be7ff','#c6a8ff','#fff'],{sp:260,up:260,g:420,r:3.4,life:1.4,k:'star'});
+  }
+}
+/* кнопка, на которой стоял фокус, спряталась (карточки, ингредиент) — возвращаем фокус внутрь окна, чтобы Tab не уходил на страницу под ним */
+function keepFocus(ph){
+  const a=document.activeElement;
+  if(a&&a!==document.body&&kOv.contains(a)&&!a.disabled&&a.offsetParent!==null)return;
+  let t=ph==='ing'?kOv.querySelector('.king'):null;
+  if(!t||t.offsetParent===null)t=kDock.querySelector('button:not(:disabled)');
+  if(!t)t=kClose;
+  try{t.focus({preventScroll:true})}catch(e){}
+}
+function startGame(){
+  const k=K;if(!k||k.phase!=='pick')return;
+  kPickEl.hidden=true;snd('newcake',.6);startTier(0);
+}
+function startTier(t){
+  const k=K;if(!k)return;
+  k.tier=t;k.add={};k.pend={};k.blobs=[];k.mix=0;k.mixDone=false;k.stirHold=false;k.stirring=false;
+  k.pour=0;k.pouring=false;k.tilt=0;k.panDone=false;k.bake=0;k.burnt=0;k.oAnim='idle';k.door=0;k.doorGoal=0;k.panIn=0;
+  k.cool=0;k.q='gold';k.fly.length=0;k.shake={};k.order=shuffle(IDS,t*7+3+k.n*11);
+  place();go('ing');
+}
+function restart(){
+  const k=K;if(!k)return;
+  k.timers.forEach(clearTimeout);k.timers.length=0;
+  k.layers=[];k.placed=0;k.drop=null;k.glz={p:0,pouring:false,flavor:'cherry',t:0,done:false};k.tier=0;k.wrong=0;k.confirmed=false;
+  kPickEl.hidden=false;selectCard(k.n);go('pick');
+  try{kCards[k.n-1].focus()}catch(e){}
+}
+
+/* ---- кнопки для каждого шага ---- */
+function dockFor(ph){
+  const k=K;if(!k)return;
+  if(ph==='pick'){setDock([]);return}
+  if(ph==='ing'){const ok=REQ.every(id=>k.add[id]);setDock([{id:'next',text:'Замесить →',cls:'pri'+(ok?' pulse':''),disabled:!ok,on:()=>{if(REQ.every(id=>k.add[id]))go('mix')}}]);return}
+  if(ph==='mix'){setDock([{id:'stir',text:'Помешать (держи)',cls:'pri',hold:[()=>{if(!k.mixDone)k.stirHold=true},()=>{k.stirHold=false}]}]);return}
+  if(ph==='pan'){setDock([{id:'pour',text:'Лить тесто (держи)',cls:'pri',hold:[()=>pourStart('btn'),()=>pourEnd()]}]);return}
+  if(ph==='oven'){ovenDock();return}
+  if(ph==='cool'){setDock([{id:'fan',text:'Помахать',cls:'pri',on:fan}]);return}
+  if(ph==='assemble'){setDock([{id:'place',text:k.n>1?'Поставить ярус '+Math.min(k.n,k.placed+1):'Поставить корж',cls:'pri',disabled:!!k.drop,on:placeNext}]);return}
+  if(ph==='glaze'){glazeDock();return}
+  if(ph==='done'){setDock([{id:'fin',text:'Украшать →',cls:'pri',on:finish},{id:'again',text:'Заново',cls:'sm',on:restart}]);return}
+}
+
+/* ---- ингредиенты ---- */
+function addBlobs(id){
+  const kind={flour:'flour',eggs:'yolk',sugar:'sugar',butter:'butter',milk:'milk',powder:'powder'}[id],cnt=id==='flour'?3:2;
+  for(let i=0;i<cnt;i++){const a=Math.random()*TAU,r0=Math.sqrt(Math.random())*.55;K.blobs.push({k:kind,x:Math.cos(a)*r0,y:Math.sin(a)*r0*.8,r:.1+Math.random()*.08})}
+}
+function pickIng(id){
+  const k=K;if(!k||k.phase!=='ing'||k.leaving||k.closing||!ING[id])return;
+  if(k.add[id]||k.pend[id]){say('Это уже в миске.','',1800);return}
+  const idx=k.order.indexOf(id),sl=P.slots[idx],it=ING[id],bad=!it.ok;
+  if(!sl)return;
+  k.fly.push({id:id,t:0,dur:bad?.95:.62,x0:sl.x,y0:sl.y,s:P.shelf.s,bad:bad});
+  k.pend[id]=true;snd('place',.6);buzz(8);
+  if(bad){
+    k.wrong++;const j=JOKES[id];let txt=j[(k.wrong+idx)%j.length];
+    if(k.wrong>=8)txt='Ты просто тыкаешь во всё подряд, да? Я всё вижу.';else if(k.wrong===4)txt='Это уже четвёртая глупость. Держу себя в руках.';
+    say(txt,'bad',3600);
+  }else say(PRAISE[id],'good',2600);
+}
+function flyEnd(f){
+  const k=K;delete k.pend[f.id];
+  if(f.bad){k.shake[f.id]=.7;snd('error',.5);return}
+  k.add[f.id]=true;addBlobs(f.id);
+  const b=P.bowl;burst(b.x,b.y+b.r*.1,12,ING[f.id].col,{sp:140,up:120,r:3.2,life:.55});
+  snd('drizzle',.3,1.3);placeIng();
+  if(REQ.every(id=>k.add[id])){if(kBtns.next){kBtns.next.disabled=false;kBtns.next.classList.add('pulse')}say('Всё на месте! Жми «Замесить».','good')}
+}
+
+/* ---- замес и заливка ---- */
+function pourStart(src){
+  const k=K;if(!k||k.phase!=='pan'||k.panDone||k.leaving)return;
+  k.pouring=true;k.pourSrc=src||'btn';
+}
+function pourEnd(){
+  const k=K;if(!k||!k.pouring)return;
+  k.pouring=false;judgePour();
+}
+function judgePour(){
+  const k=K;if(!k||k.phase!=='pan'||k.panDone)return;
+  if(k.pour<.78){if(k.pour>.08)say('Маловато. Долей ещё — до зелёной зоны.','bad',2800);return}
+  k.panDone=true;snd('finish',.45);
+  say(k.pour>1.005?'Чуть через край, но я подтёрла. Идём в духовку!':'Ровно! Теперь в духовку.','good',2600);
+  later(1000,()=>go('oven'));
+}
+
+/* ---- духовка ---- */
+function ovenDock(){
+  const k=K,busy=k.oAnim!=='idle'&&k.oAnim!=='bake';
+  const dn={id:'dn',text:'−10°',cls:'sm',on:()=>tempStep(-10),aria:'Температура ниже'},up={id:'up',text:'+10°',cls:'sm',on:()=>tempStep(10),aria:'Температура выше'};
+  const main=k.oAnim==='bake'?{id:'take',text:'Достать!',cls:'pri',on:()=>ovenTake(false)}:{id:'put',text:'Поставить форму →',cls:'pri',on:ovenPut,disabled:busy};
+  setDock([dn,main,up]);
+}
+function setOAnim(s){const k=K;if(!k)return;k.oAnim=s;if(k.phase==='oven'&&!k.leaving){ovenDock();const h=hintText();if(h&&(s==='idle'||s==='bake'))say(h,'')}}
+function tempStep(d){
+  const k=K;if(!k||k.phase!=='oven'||k.leaving)return;
+  k.oTarget=cl(k.oTarget+d,100,250);snd('place',.35,1+(k.oTarget-180)/400);buzz(8);
+  if(k.oTarget>=230)say('Ого, жарко! Сгорит быстрее, чем ты моргнёшь.','bad',2600);
+  else if(k.oTarget===180)say('180° — как в рецепте. Умница.','good',2200);
+}
+function ovenPut(){
+  const k=K;if(!k||k.phase!=='oven'||k.oAnim!=='idle'||k.leaving)return;
+  k.doorGoal=1;snd('place',.5);setOAnim('open1');
+}
+function ovenTake(auto){
+  const k=K;if(!k||k.phase!=='oven'||k.oAnim!=='bake')return;
+  k.doorGoal=1;snd('place',.5);setOAnim('open2');
+  if(auto)say('Духовка сама отключилась. Ты бы ещё до утра её держал!','bad',3200);
+}
+function bakeStep(dt){
+  const k=K,v=cl((k.oT-90)/90,0,2.4),before=k.bake;k.bake+=dt*v/BAKE_BASE;
+  if(before<B_RAW&&k.bake>=B_RAW){say('Золотится! Доставай, когда шкала зелёная.','good',3200);snd('light',.6);buzz(10)}
+  if(before<B_BURN&&k.bake>=B_BURN){say('Пахнет гарью!! Доставай скорее!','bad',3400);snd('error',.5);buzz(30)}
+  if(k.bake>=B_MAX){ovenTake(true);return}
+  const o=P.oven;
+  if(Math.random()<dt*(2+v*3)&&k.bake<B_BURN)K.parts.push({x:o.x+o.w*(.25+Math.random()*.5),y:o.y-2,vx:(Math.random()-.5)*10,vy:-26-Math.random()*20,g:-6,age:0,life:1.5,r:9+Math.random()*7,col:'rgba(255,255,255,.4)',k:'puff'});
+  if(k.bake>B_BURN&&Math.random()<dt*14)K.parts.push({x:o.x+o.w*(.25+Math.random()*.5),y:o.y-2,vx:(Math.random()-.5)*16,vy:-40-Math.random()*30,g:-10,age:0,life:1.8,r:11+Math.random()*9,col:'rgba(34,30,32,.8)',k:'puff'});
+}
+function judgeBake(){
+  const k=K;if(!k)return;setOAnim('judge');
+  const p=k.bake;
+  if(p<B_RAW){
+    say('Сыроват — серединка ещё жидкая. Ставлю обратно.','bad',3200);snd('error',.5);
+    later(1100,()=>{if(K===k&&k.phase==='oven'){k.doorGoal=1;setOAnim('slide1')}});
+  }else if(p>B_BURN){
+    k.burnt++;
+    if(k.burnt>=2){
+      say('Ну всё. Сделаю вид, что так и задумано. Тёмный бисквит — это стиль.','',4400);k.q='dark';snd('error',.5);
+      later(1500,()=>finishBake());
+    }else{
+      say('Угольки!.. Ладно, налью ещё теста. Бесплатно. Один раз.','bad',4400);snd('error',.6);buzz(40);
+      later(1500,()=>{if(K===k&&k.phase==='oven'){k.bake=0;k.doorGoal=0;setOAnim('idle')}});
+    }
+  }else{
+    k.q='gold';finishBake();
+  }
+}
+function finishBake(){
+  const k=K;if(!k||k.phase!=='oven')return;
+  if(k.q==='gold'){say('Золотистый! Красота. Не то чтобы я гордилась.','good',3000);snd('finish',.6);burst(P.ovFront.x,P.ovFront.y-P.pr*.2,26,['#ffe08a','#ffb24a','#fff'],{sp:200,up:180,g:380,r:3,life:.9,k:'star'})}
+  k.doorGoal=0;later(1500,()=>go('cool'));
+  k.oAnim='out';
+}
+
+/* ---- остывание, сборка, глазурь ---- */
+function fan(){
+  const k=K;if(!k||k.phase!=='cool'||k.busy||k.leaving)return;
+  k.cool=Math.min(1,k.cool+.2);k.coolT=.4;sndSpin();buzz(8);
+  const g=coolGeo();burst(g.x-g.r*.6,g.top,6,'rgba(255,255,255,.55)',{sp:160,up:-20,g:-20,r:5,life:.6,k:'puff'});
+}
+function tierDone(){
+  const k=K;if(!k)return;
+  k.layers.push({q:k.q});const last=k.tier+1>=k.n;
+  say(last?'Все коржи готовы! Теперь собирать.':'Ярус '+(k.tier+1)+' готов! Следующий — поменьше.','good',2800);
+  snd('finish',.6);burst(P.rack.x,coolGeo().top,24,['#ffd35a','#ff8fb1','#fff'],{sp:200,up:200,g:420,r:3,life:1,k:'star'});
+  k.busy=true;
+  later(1500,()=>{if(last)go('assemble');else startTier(k.tier+1)});
+}
+function placeNext(){
+  const k=K;if(!k||k.phase!=='assemble'||k.drop||k.placed>=k.n||k.leaving)return;
+  k.drop={k:k.placed,t:0};snd('place',.6);if(kBtns.place)kBtns.place.disabled=true;
+}
+function glazeDock(){
+  const k=K,wrap=document.createElement('div');wrap.className='kchips';
+  GLZ_ORDER.forEach(f=>{
+    const b=document.createElement('button');b.type='button';b.className='kchip';b.style.background=flavCol(f);b.textContent=GLZ[f].em;
+    b.setAttribute('aria-label',GLZ[f].name);b.setAttribute('aria-pressed',String(f===k.glz.flavor));
+    b.addEventListener('click',()=>{
+      if(k.glz.done||k.leaving)return;
+      if(k.glz.flavor!==f){
+        k.glz.flavor=f;k.glz.p=0;k.glz.pouring=false;
+        wrap.querySelectorAll('.kchip').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+        say(GLZ[f].name+'. Хороший выбор. Держи «Лить».','',2600);snd('place',.4);
+      }
+    });
+    wrap.appendChild(b);
+  });
+  setDock([{node:wrap},{id:'glaze',text:'Лить глазурь (держи)',cls:'pri',hold:[()=>{if(!k.glz.done&&!k.leaving)k.glz.pouring=true},()=>{k.glz.pouring=false}]}]);
+}
+function finish(){
+  const k=K;if(!k||k.phase!=='done'||k.closing)return;
+  let empty=true;try{empty=!window.__cake||window.__cake.isEmpty()}catch(e){}
+  if(!empty&&!k.confirmed){
+    k.leaving=true;say('У тебя уже есть украшенный торт. Новый его заменит. Продолжаем?','bad');
+    setDock([{text:'Да, заменить',cls:'pri',on:()=>{k.confirmed=true;k.leaving=false;finish()}},{text:'Отмена',on:()=>{k.leaving=false;dockFor('done');hint()}}]);
+    return;
+  }
+  const n=k.n,fl=k.glz.flavor;
+  try{window.__cake.fresh(n,fl)}catch(e){}
+  snd('newcake',.8);closeNow(true);
+}
+
+/* ---- открыть / закрыть ---- */
+function requestClose(){
+  const k=K;if(!k||k.closing)return;
+  if(k.phase==='pick'){closeNow(false);return}
+  if(k.leaving){cancelLeave();return}
+  k.leaving=true;k.stirHold=false;k.stirring=false;k.pouring=false;k.glz.pouring=false;
+  say(k.phase==='done'?'Выйти? Готовый торт пропадёт.':'Выйти из кухни? Торт не будет испечён.','bad');
+  setDock([{text:'Остаться',cls:'pri',on:cancelLeave},{text:'Выйти',on:()=>closeNow(false)}]);
+  placeIng();
+}
+function cancelLeave(){const k=K;if(!k)return;k.leaving=false;dockFor(k.phase);hint();placeIng()}
+function closeNow(finished){
+  const k=K;if(!k||k.closing)return;
+  k.closing=true;k.stirHold=false;k.pouring=false;k.leaving=false;
+  k.timers.forEach(clearTimeout);k.timers.length=0;clearTimeout(bubTimer);bubTimer=0;
+  kOv.classList.remove('in');kOv.classList.add('out');placeIng();
+  try{if(window.__cake&&window.__cake.pause)window.__cake.pause(false)}catch(e){}
+  setTimeout(()=>{
+    if(K!==k)return;
+    kOv.hidden=true;kOv.classList.remove('out');
+    if(loopId)cancelAnimationFrame(loopId);loopId=0;K=null;
+    try{if(!anyOverlayOpen())document.documentElement.classList.remove('ov-open')}catch(e){document.documentElement.classList.remove('ov-open')}
+    if(lastFocus&&lastFocus.focus)try{lastFocus.focus()}catch(e){}
+  },finished?460:300);
+}
+function openK(){
+  if(K||!kOv.hidden)return;
+  try{if(window.__cake&&window.__cake.pause)window.__cake.pause(true)}catch(e){}
+  lastFocus=document.activeElement;
+  K=newSession();ensureIngBtns();
+  kOv.hidden=false;kOv.classList.remove('out','in');void kOv.offsetWidth;kOv.classList.add('in');
+  document.documentElement.classList.add('ov-open');
+  kPickEl.hidden=false;sizeCanvas();selectCard(1);go('pick');
+  lastT=performance.now();loopId=requestAnimationFrame(tick);
+  try{kCards[0].focus()}catch(e){}
+}
+function tick(now){
+  if(!K){loopId=0;return}
+  const dt=Math.min(.05,Math.max(0,(now-lastT)/1000));lastT=now;K.t+=dt;
+  try{update(dt);render()}catch(e){if(!K.err){K.err=1;try{console.error(e)}catch(_){}}}
+  loopId=requestAnimationFrame(tick);
+}
+
+/* ---- время идёт ---- */
+function update(dt){
+  const k=K;
+  for(let i=k.parts.length-1;i>=0;i--){const q=k.parts[i];q.age+=dt;if(q.age>=q.life){k.parts.splice(i,1);continue}q.vy+=(q.g===undefined?400:q.g)*dt;q.x+=q.vx*dt;q.y+=q.vy*dt}
+  for(let i=k.fly.length-1;i>=0;i--){const f=k.fly[i];f.t+=dt;if(f.t>=f.dur){k.fly.splice(i,1);flyEnd(f)}}
+  for(const id in k.shake){k.shake[id]-=dt;if(k.shake[id]<=0)delete k.shake[id]}
+  if(k.coolT>0)k.coolT-=dt;
+  const ph=k.phase;
+  if(ph==='mix'){
+    const w=k.whisk;let sp=.9;
+    if(k.stirHold&&!k.mixDone){k.mix+=dt*.2;sp=7.5;sndSpin()}
+    if(k.stirring)sp=Math.max(sp,6);
+    w.sp+=(sp-w.sp)*Math.min(1,dt*8);w.ph+=dt*w.sp;
+    if(k.mix>=1&&!k.mixDone){
+      k.mix=1;k.mixDone=true;k.stirHold=false;k.stirring=false;
+      say('Тесто гладкое! Теперь в форму.','good',2800);snd('finish',.5);later(1000,()=>go('pan'));
+    }
+  }else if(ph==='pan'){
+    if(k.pouring&&!k.panDone){
+      k.pour+=dt*.22;k.pourT-=dt;
+      if(k.pourT<=0){k.pourT=.5;snd('drizzle',.45)}
+      if(k.pour>=1.07){
+        k.pour=1;k.pouring=false;say('Через край! Ладно, подтёрла.','bad',2400);
+        burst(P.pan.x,P.pan.y,14,batterColor(k.add,1),{sp:150,up:140,r:3.5,life:.6});judgePour();
+      }
+    }
+    k.tilt+=((k.pouring&&!k.panDone?1:0)-k.tilt)*Math.min(1,dt*6);
+    if(k.pouring&&Math.random()<dt*30){const pn=P.pan;k.parts.push({x:pn.x+(Math.random()-.5)*pn.r*.3,y:pn.y,vx:(Math.random()-.5)*70,vy:-60-Math.random()*60,g:520,age:0,life:.45,r:2+Math.random()*2.4,col:batterColor(k.add,1),k:'dot'})}
+  }else if(ph==='oven'){
+    if(k.oT<k.oTarget)k.oT=Math.min(k.oTarget,k.oT+dt*(k.oT<100?55:38));else k.oT=Math.max(k.oTarget,k.oT-dt*10);
+    const dg=k.doorGoal;k.door+=Math.sign(dg-k.door)*Math.min(Math.abs(dg-k.door),dt/.45);
+    switch(k.oAnim){
+      case 'open1':if(k.door>=.99)setOAnim('slide1');break;
+      case 'slide1':k.panIn=Math.min(1,k.panIn+dt/.7);if(k.panIn>=1){k.doorGoal=0;setOAnim('close1')}break;
+      case 'close1':if(k.door<=.01){setOAnim('bake');say('Печётся! Следи за шкалой.','',3000)}break;
+      case 'bake':bakeStep(dt);break;
+      case 'open2':if(k.door>=.99)setOAnim('slide2');break;
+      case 'slide2':k.panIn=Math.max(0,k.panIn-dt/.6);if(k.panIn<=0)judgeBake();break;
+    }
+  }else if(ph==='cool'){
+    if(!k.busy){
+      k.cool=Math.min(1,k.cool+dt*.03);
+      if(k.cool>=1){k.busy=true;say('Остыл!','good',2000);later(800,tierDone)}
+      if(Math.random()<dt*(1+4*(1-k.cool))){const r=P.rack,g=coolGeo();k.parts.push({x:r.x+(Math.random()-.5)*r.r*1.1,y:g.top-r.r*CSY*.5,vx:(Math.random()-.5)*8,vy:-22-Math.random()*16,g:-4,age:0,life:1.6,r:5+Math.random()*5,col:'rgba(255,255,255,'+(.18+.3*(1-k.cool))+')',k:'puff'})}
+    }
+  }else if(ph==='assemble'){
+    if(k.drop){
+      k.drop.t+=dt;
+      if(k.drop.t>=.55){
+        k.placed++;k.drop=null;snd('place',.9,.8);buzz(16);
+        const s=P.stand;burst(s.x,s.y,10,'rgba(255,240,220,.7)',{sp:130,up:30,g:60,r:4,life:.5,k:'puff'});
+        if(k.placed>=k.n){say('Стоит! Теперь глазурь.','good',2600);later(900,()=>go('glaze'))}else{dockFor('assemble')}
+      }
+    }
+  }else if(ph==='glaze'){
+    const g=k.glz;
+    if(g.pouring&&!g.done){
+      g.p=Math.min(1,g.p+dt*.4);g.t-=dt;
+      if(g.t<=0){g.t=.4;snd('drizzle',.5)}
+      if(g.p>=1){g.done=true;g.pouring=false;say('Блестит! Ровно. Идеально.','good',2800);snd('finish',.6);later(1300,()=>go('done'))}
+    }
+  }else if(ph==='done'){
+    k.doneT-=dt;
+    if(k.doneT<=0){k.doneT=.22;const s=P.stand;burst(s.x+(Math.random()-.5)*s.r*1.6,s.y-s.r*(.3+Math.random()*.9),1,['#fff','#ffe08a','#ffc2d6'],{sp:30,up:20,g:-20,r:3,life:.9,k:'star'})}
+  }
+}
+
+/* ---- пальцы и мышь ---- */
+function ptPos(e){const r=kCv.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
+function onDown(p){
+  const k=K,ph=k.phase;
+  if(ph==='mix'&&!k.mixDone){
+    const b=P.mixBowl,cx0=b.x,cy0=b.y+b.r*.05;
+    if(Math.hypot(p.x-cx0,(p.y-cy0)*1.6)<b.r*1.5){k.stirring=true;k.mixAng=Math.atan2(p.y-cy0,p.x-cx0);k.whisk.x=p.x;k.whisk.y=p.y}
+  }else if(ph==='pan'){
+    const b=P.pBowlPos;if(b&&Math.hypot(p.x-b.x,p.y-b.y)<P.pBowlR*1.4)pourStart('cv');
+  }else if(ph==='cool'){
+    const g=coolGeo();if(Math.hypot(p.x-g.x,(p.y-(g.y-g.h*.5))*1.3)<g.r*1.5)fan();
+  }else if(ph==='assemble'){
+    placeNext();
+  }else if(ph==='glaze'){
+    if(p.y<LAY.sb&&!k.glz.done)k.glz.pouring=true;
+  }else if(ph==='done'){
+    burst(p.x,p.y,10,['#fff','#ffe08a','#ffc2d6'],{sp:120,up:80,g:200,r:3,life:.8,k:'star'});snd('place',.3,1.4);
+  }
+}
+function onMove(p){
+  const k=K;
+  if(k.phase==='mix'&&k.stirring){
+    const b=P.mixBowl,cx0=b.x,cy0=b.y+b.r*.05,a=Math.atan2(p.y-cy0,p.x-cx0);
+    let d=a-k.mixAng;while(d>Math.PI)d-=TAU;while(d<-Math.PI)d+=TAU;
+    k.mixAng=a;
+    if(Math.abs(d)<1.3&&Math.hypot(p.x-cx0,(p.y-cy0)*1.6)>b.r*.18){k.mix=Math.min(1,k.mix+Math.abs(d)/(TAU*6));sndSpin()}
+    k.whisk.x=p.x;k.whisk.y=p.y;
+  }
+}
+function onUp(){
+  const k=K;
+  k.stirring=false;
+  if(k.phase==='pan'&&k.pouring&&k.pourSrc==='cv')pourEnd();
+  k.glz.pouring=false;
+}
+kCv.addEventListener('pointerdown',e=>{
+  const k=K;if(!k||k.closing||k.leaving)return;
+  e.preventDefault();const p=ptPos(e);k.ptr={id:e.pointerId,x:p.x,y:p.y};
+  try{kCv.setPointerCapture(e.pointerId)}catch(_){}
+  onDown(p);
+});
+kCv.addEventListener('pointermove',e=>{const k=K;if(!k||!k.ptr||k.ptr.id!==e.pointerId||k.leaving)return;const p=ptPos(e);onMove(p);k.ptr.x=p.x;k.ptr.y=p.y});
+const kUp=e=>{const k=K;if(!k||!k.ptr||k.ptr.id!==e.pointerId)return;k.ptr=null;onUp()};
+kCv.addEventListener('pointerup',kUp);kCv.addEventListener('pointercancel',kUp);kCv.addEventListener('lostpointercapture',kUp);
+kCv.addEventListener('contextmenu',e=>e.preventDefault());
+kClose.addEventListener('click',requestClose);
+kCards.forEach(b=>b.addEventListener('click',()=>{if(!K||K.phase!=='pick')return;selectCard(+b.dataset.n);snd('place',.5)}));
+kGo.addEventListener('click',startGame);
+if(typeof ResizeObserver!=='undefined')new ResizeObserver(()=>{if(K)sizeCanvas()}).observe(kOv);
+window.addEventListener('resize',()=>{if(K)sizeCanvas()});
+window.addEventListener('orientationchange',()=>{setTimeout(()=>{if(K)sizeCanvas()},250)});
+
+
+/* ---------- Кухня: отрисовка сцены ---------- */
+const BAKE_RAMP=[[0,243,214,150],[.6,236,190,112],[.95,222,152,72],[1.15,150,86,36],[1.45,58,30,14]];
+function ramp(p,st){
+  for(let i=1;i<st.length;i++){
+    if(p<=st[i][0]){const a=st[i-1],b=st[i],t=(p-a[0])/((b[0]-a[0])||1);return 'rgb('+Math.round(mixn(a[1],b[1],t))+','+Math.round(mixn(a[2],b[2],t))+','+Math.round(mixn(a[3],b[3],t))+')'}
+  }
+  const l=st[st.length-1];return 'rgb('+l[1]+','+l[2]+','+l[3]+')';
+}
+function bgKey(){return LAY.W+'x'+LAY.H+'@'+LAY.dpr+'|'+LAY.cY+'|'+(document.documentElement.getAttribute('data-ui')||'')+'|'+(window.__horror?1:0)}
+function buildBg(){
+  const W=LAY.W,H=LAY.H,d=LAY.dpr;
+  if(!bgC.cv)bgC.cv=document.createElement('canvas');
+  bgC.cv.width=Math.round(W*d);bgC.cv.height=Math.round(H*d);
+  const c=bgC.cv.getContext('2d');c.setTransform(d,0,0,d,0,0);
+  drawBg(c,W,H,{cY:LAY.cY,U:LAY.U,win:P.win,lamp:P.lamp});
+  bgC.key=bgKey();
+}
+function ease(u){u=cl(u,0,1);return u*u*(3-2*u)}
+function bakeBar(c,x,y,w,h,p){
+  const mx=B_MAX,x0=x-w/2;
+  c.save();c.fillStyle='rgba(0,0,0,.5)';rr(c,x0-3,y-h/2-3,w+6,h+6,h/2+3);c.fill();
+  rr(c,x0,y-h/2,w,h,h/2);c.clip();
+  const seg=(a,b,col)=>{c.fillStyle=col;c.fillRect(x0+w*a/mx,y-h/2,w*(b-a)/mx+.5,h)};
+  seg(0,B_RAW,'#7a5530');seg(B_RAW,B_BURN,'#46c27a');seg(B_BURN,mx,'#8a2c22');
+  c.fillStyle='rgba(255,255,255,.14)';c.fillRect(x0,y-h/2,w,h*.4);
+  c.fillStyle='rgba(255,255,255,.92)';c.font=fontK(h*.56,800);c.textAlign='center';c.textBaseline='middle';
+  c.fillText('сыро',x0+w*B_RAW/mx/2,y+h*.03);c.fillText('готово',x0+w*(B_RAW+B_BURN)/2/mx,y+h*.03);c.fillText('горит',x0+w*(B_BURN+mx)/2/mx,y+h*.03);
+  c.restore();
+  const mxp=x0+w*cl(p,0,mx)/mx;
+  c.fillStyle='#fff';c.strokeStyle='rgba(0,0,0,.55)';c.lineWidth=1.5;
+  c.beginPath();c.moveTo(mxp,y-h/2-2);c.lineTo(mxp-7,y-h/2-13);c.lineTo(mxp+7,y-h/2-13);c.closePath();c.fill();c.stroke();
+  c.fillRect(mxp-1.5,y-h/2-2,3,h+4);
+}
+function drawRack(c,x,y,r){
+  const ry=r*CSY,lh=r*.16;
+  softShadow(c,x,y+lh+ry*.45,r*1.06,ry*.95,.38);
+  c.strokeStyle='#8a8f9a';c.lineWidth=Math.max(2,r*.035);c.lineCap='round';
+  for(const sx of [-.82,-.3,.3,.82]){const yy=y+ry*Math.sqrt(1-sx*sx);c.beginPath();c.moveTo(x+r*sx,yy);c.lineTo(x+r*sx*1.03,yy+lh);c.stroke()}
+  c.lineCap='butt';
+  c.fillStyle='rgba(30,30,36,.28)';ell(c,x,y,r,ry);c.fill();
+  c.save();ell(c,x,y,r,ry);c.clip();c.strokeStyle='rgba(207,213,222,.9)';c.lineWidth=Math.max(1,r*.014);
+  for(let i=-6;i<=6;i++){c.beginPath();c.moveTo(x+r*i/6,y-ry);c.lineTo(x+r*i/6,y+ry);c.stroke()}
+  for(let j=-3;j<=3;j++){c.beginPath();c.moveTo(x-r,y+ry*j/3);c.lineTo(x+r,y+ry*j/3);c.stroke()}
+  c.restore();
+  c.strokeStyle='#e8ecf3';c.lineWidth=Math.max(2,r*.035);ell(c,x,y,r,ry);c.stroke();
+}
+function drawJug(c,x,y,s,col,tilt){
+  c.save();c.translate(x,y);c.rotate(tilt);
+  c.fillStyle='rgba(0,0,0,.25)';ell(c,s*.7,s*.12,s*.8,s*.12);c.fill();
+  c.beginPath();c.moveTo(0,0);c.lineTo(s*.3,-s*.18);c.quadraticCurveTo(s*1.05,-s*.06,s*1.3,-s*1.0);c.lineTo(s*.55,-s*1.28);c.quadraticCurveTo(s*.28,-s*.8,0,0);c.closePath();
+  c.fillStyle=lin(c,0,-s*1.2,s*1.3,0,[0,'#fbf6ff',1,'#c7bcd2']);c.fill();c.strokeStyle='rgba(60,40,70,.5)';c.lineWidth=Math.max(1,s*.03);c.stroke();
+  c.fillStyle=col;c.beginPath();c.moveTo(s*.07,-s*.07);c.lineTo(s*.3,-s*.17);c.quadraticCurveTo(s*.85,-s*.06,s*1.05,-s*.55);c.lineTo(s*.62,-s*.62);c.quadraticCurveTo(s*.3,-s*.4,s*.07,-s*.07);c.closePath();c.fill();
+  c.strokeStyle='#c7bcd2';c.lineWidth=Math.max(2,s*.09);c.lineCap='round';c.beginPath();c.moveTo(s*1.28,-s*.95);c.bezierCurveTo(s*1.75,-s*.95,s*1.7,-s*.25,s*1.2,-s*.2);c.stroke();
+  c.restore();
+}
+function drawCheck(c,x,y,r,col){
+  c.fillStyle=col;ell(c,x,y,r,r);c.fill();
+  c.strokeStyle='#fff';c.lineWidth=Math.max(1.5,r*.28);c.lineCap='round';c.lineJoin='round';
+  c.beginPath();c.moveTo(x-r*.45,y+r*.02);c.lineTo(x-r*.1,y+r*.38);c.lineTo(x+r*.5,y-r*.34);c.stroke();c.lineCap='butt';
+}
+function drawCross(c,x,y,r){
+  c.fillStyle='#e8344f';ell(c,x,y,r,r);c.fill();
+  c.strokeStyle='#fff';c.lineWidth=Math.max(1.5,r*.28);c.lineCap='round';const q=r*.42;
+  c.beginPath();c.moveTo(x-q,y-q);c.lineTo(x+q,y+q);c.moveTo(x+q,y-q);c.lineTo(x-q,y+q);c.stroke();c.lineCap='butt';
+}
+function labelText(c,t,x,y,sz,col,maxW){
+  c.font=fontK(sz,800);
+  if(maxW){const tw=c.measureText(t).width;if(tw>maxW){sz=Math.max(7.5,sz*maxW/tw);c.font=fontK(sz,800)}}
+  c.textAlign='center';c.textBaseline='middle';
+  c.lineJoin='round';c.lineWidth=Math.max(2.5,sz*.26);c.strokeStyle='rgba(18,6,12,.75)';c.strokeText(t,x,y);
+  c.fillStyle=col;c.fillText(t,x,y);
+}
+
+function drawNote(){
+  const k=K,nt=P.note,ph=k.phase;
+  const title='Рецепт'+(k.n>1&&ph!=='pick'?' · ярус '+(k.tier+1):'');
+  let lines;
+  if(ph==='pick'||ph==='ing')lines=REQ.map(id=>({t:ING[id].name,done:!!k.add[id]}));
+  else{const idx=TIER_PH.indexOf(ph);lines=[{t:'Замесить',done:idx>1},{t:'Налить в форму',done:idx>2},{t:'Духовка 180°',done:idx>3},{t:'Остудить',done:false}]}
+  note(kx,nt.x,nt.y,nt.w,title,lines,cl(LAY.U,.8,1.2));
+}
+function drawFly(f){
+  const c=kx,u=cl(f.t/f.dur,0,1),b=P.bowl,x1=b.x,y1=b.y+b.r*.1,cx0=(f.x0+x1)/2,cy0=Math.min(f.y0,y1)-70*LAY.U;
+  const w=f.bad?Math.sin(u*Math.PI)*.6:ease(u);
+  const x=(1-w)*(1-w)*f.x0+2*(1-w)*w*cx0+w*w*x1,y=(1-w)*(1-w)*f.y0+2*(1-w)*w*cy0+w*w*y1;
+  const sc=f.bad?1+.12*Math.sin(u*Math.PI):1-.5*w;
+  c.save();c.translate(x,y);c.rotate(f.bad?Math.sin(u*18)*.22:w*1.4);ING[f.id].draw(c,f.s*sc);c.restore();
+  if(f.bad&&u>.4){c.save();c.globalAlpha=Math.min(1,(u-.4)*4)*(u>.82?(1-u)*5.5:1);drawCross(c,x+f.s*.7,y-f.s*.8,f.s*.36);c.restore()}
+}
+function drawIngScene(){
+  const k=K,c=kx,s=P.shelf,sh=s.s,pk=k.phase==='ing';
+  for(let r=0;r<s.rows;r++){
+    const y=s.y0+r*s.rh+sh*.98,w=s.cw*s.cols;
+    c.fillStyle='rgba(0,0,0,.3)';rr(c,s.x0-4,y+3,w+8,sh*.24,sh*.1);c.fill();
+    c.fillStyle=lin(c,0,y,0,y+sh*.24,[0,'#b07a50',1,'#7a4b2c']);rr(c,s.x0-6,y,w+12,sh*.24,sh*.1);c.fill();
+    c.fillStyle='rgba(255,230,190,.25)';c.fillRect(s.x0,y+1,w,Math.max(1,sh*.04));
+  }
+  for(let i=0;i<k.order.length;i++){
+    const id=k.order[i],it=ING[id],sl=P.slots[i],used=!!k.add[id],flying=!!k.pend[id];
+    const hov=pk&&k.hov===id&&!used&&!flying;
+    const bob=(used||!pk)?0:Math.sin(k.t*2+i*1.3)*sh*.025;
+    const dx=k.shake[id]?Math.sin(k.t*60)*sh*.12*Math.min(1,k.shake[id]/.3):0;
+    c.save();c.translate(sl.x+dx,sl.y+bob-(hov?sh*.08:0));c.globalAlpha=(used||flying)?.28:1;
+    if(hov)c.scale(1.08,1.08);
+    it.draw(c,sh);c.restore();
+    labelText(c,it.name,sl.x,sl.y+sh*1.42,cl(sh*.4,10.5,14),used?'rgba(255,240,230,.5)':(hov?'#fff':'#ffe9dc'),P.shelf.cw-3);
+    if(used&&pk)drawCheck(c,sl.x+sh*.74,sl.y-sh*.78,sh*.3,'#35c26b');
+    if(k.shake[id]&&k.shake[id]>.15)drawCross(c,sl.x+sh*.74,sl.y-sh*.78,sh*.3);
+  }
+  const b=P.bowl;
+  drawBowl(c,b.x,b.y,b.r,{batter:{add:k.add,mix:0,t:k.t,blobs:k.blobs}});
+  for(const f of k.fly)drawFly(f);
+  if(pk&&REQ.every(id=>k.add[id]))caption(c,b.x,b.y+b.r*1.12,'Всё готово — замешивай!',cl(12*LAY.U,11,15));
+}
+function drawMixScene(){
+  const k=K,c=kx,b=P.mixBowl,w=k.whisk;
+  const cx0=b.x,cy0=b.y+b.r*.3*.25+b.r*.04;
+  drawBowl(c,b.x,b.y,b.r,{batter:{add:k.add,mix:k.mix,t:k.t,blobs:k.blobs},mid:()=>{
+    let tx,ty;
+    if(k.stirring){tx=cl(w.x,cx0-b.r*.62,cx0+b.r*.62);ty=cl(w.y,cy0-b.r*.17,cy0+b.r*.2)}
+    else{tx=cx0+Math.cos(w.ph)*b.r*.5;ty=cy0+Math.sin(w.ph)*b.r*.14}
+    drawWhisk(c,tx,ty,.38+Math.sin(w.ph)*.12,b.r*1.55);
+  }});
+  const pw=Math.min(260,LAY.W*.62),py=b.y+b.r*1.0+22;
+  pill(c,b.x,py,pw,18,k.mix,null,'Размешано '+Math.round(k.mix*100)+'%');
+  if(!k.stirring&&k.mix<.05)caption(c,b.x,b.y-b.r*.55,'Води по кругу',cl(12*LAY.U,11,15),.9+.1*Math.sin(k.t*4));
+}
+function drawPickScene(){
+  if(LAY.compact)return; // в узком горизонтальном экране карточки занимают всё место — миска только мешает
+  const c=kx,W=LAY.W,bx=W/2;let r=cl(Math.min(W*.3,(LAY.sb-LAY.cY)*.34),56,180);
+  // миска живёт под кнопкой «Начать готовить»; если места мало (маленький телефон) — уменьшаем или совсем не рисуем
+  if(kGo&&kGo.offsetParent!==null){const free=LAY.sb-(kGo.getBoundingClientRect().bottom-kOv.getBoundingClientRect().top)-8,r2=free/1.9;if(r2<44)return;r=Math.min(r,r2)}
+  const by=Math.round(LAY.sb-r*.9);
+  drawBowl(c,bx,by,r,{batter:{add:{flour:1,eggs:1,sugar:1,milk:1},mix:.45,t:K.t,blobs:[]},mid:()=>{drawWhisk(c,bx+r*.18,by+r*.08,.55,r*1.5)}});
+}
+function drawPanScene(){
+  const k=K,c=kx,pn=P.pan,pr=pn.r,br=P.pBowlR,u=ease(k.tilt),W=LAY.W;
+  const col=batterColor(k.add,1);
+  drawPan(c,pn.x,pn.y,pr,{fill:k.pour,col:col,h:pr*.36});
+  const gx=Math.max(26,pn.x-pr-34),gh=pr*1.5,gy=pn.y+pr*.36;
+  drawGauge(c,gx,gy,gh,k.pour,.78,1.0);
+  caption(c,Math.max(gx+6,58),gy-gh-20,'до зелёного',cl(11*LAY.U,10,13));
+  const rest={x:Math.round(W-br*1.1-8),y:Math.round(pn.y-pr*.5-br*.5)},th0=-.95;
+  const pour={x:pn.x+pr*.12+.223*br,y:pn.y-pr*.95-1.512*br};
+  const bx=mixn(rest.x,pour.x,u),by=mixn(rest.y,pour.y,u),th=th0*u;
+  P.pBowlPos={x:bx,y:by};
+  softShadow(c,mixn(rest.x,pn.x+pr*.3,u*.8),rest.y+br*.8,br*1.2,br*.26,.5*(1-.6*u));
+  if(u>.5){
+    const cs=Math.cos(th),sn=Math.sin(th),lx=bx+.86*br-1.86*br*cs,ly=by-1.86*br*sn;
+    const f=Math.min(k.pour,1),surf=pn.y+(1-f)*pr*.36*.9+pr*.04;
+    const a=cl((u-.5)*2.2,0,1)*(k.pouring?1:0),sw=Math.sin(k.t*9)*pr*.015;
+    if(a>.05){
+      c.save();c.globalAlpha=a;c.lineCap='round';
+      c.strokeStyle=col;c.lineWidth=Math.max(3,pr*.12*a);c.beginPath();c.moveTo(lx,ly);c.quadraticCurveTo(lx+sw,(ly+surf)/2,pn.x+pr*.12+sw,surf);c.stroke();
+      c.strokeStyle='rgba(255,255,255,.38)';c.lineWidth=Math.max(1,pr*.03);c.beginPath();c.moveTo(lx-pr*.02,ly);c.quadraticCurveTo(lx+sw-pr*.02,(ly+surf)/2,pn.x+pr*.1+sw,surf);c.stroke();
+      c.restore();
+    }
+  }
+  drawBowl(c,bx,by,br,{tilt:th,noShadow:true,batter:{add:k.add,mix:1,t:k.t,blobs:[],lvl:1-Math.min(1,k.pour)*.85}});
+  if(k.pour<.02&&!k.pouring)caption(c,rest.x,rest.y-br*1.0,'Держи кнопку',cl(12*LAY.U,11,15),.9+.1*Math.sin(k.t*4));
+}
+function drawOvenScene(){
+  const k=K,c=kx,o=P.oven,pr=P.pr,n=k.n,ratio=(RATIO[n]||[1])[k.tier]||1;
+  const ready=Math.abs(k.oT-k.oTarget)<4,heat=cl((k.oT-60)/160,0,1);
+  const cavR=o.w*.88*.3*ratio,cx0=o.x+o.w/2,cy0=o.y+.646*o.h;
+  const inCav=k.panIn>=.999;
+  const panCol=k.bake>0?ramp(k.bake,BAKE_RAMP):batterColor(k.add,1);
+  drawOven(c,{x:o.x,y:o.y,w:o.w,h:o.h},{door:k.door,temp:k.oT,target:k.oTarget,heat:heat,text:ready?Math.round(k.oTarget)+'°':Math.round(k.oT)+'°',ready:ready,
+    pan:inCav?{fill:1,col:panCol,rise:cl(k.bake*1.15,0,1),r:cavR}:null});
+  if(!inCav){
+    const u=ease(k.panIn),px=mixn(P.ovFront.x,cx0,u),py=mixn(P.ovFront.y,cy0,u)-Math.sin(u*Math.PI)*pr*.25,rr0=mixn(pr,cavR,u);
+    drawPan(c,px,py,rr0,{fill:1,col:panCol,rise:cl(k.bake*1.15,0,1),h:rr0*.34,shadow:u<.6});
+  }
+  if(k.bake>0||k.oAnim==='bake'||k.oAnim==='open2'||k.oAnim==='slide2')bakeBar(c,P.bar.x,P.bar.y,P.bar.w,P.bar.h,k.bake);
+  else{
+    const y=o.y-14;
+    if(y>LAY.st+6)caption(c,cx0,y,'Цель '+k.oTarget+'° · по рецепту 180°',cl(12*LAY.U,11,15));
+  }
+}
+function coolGeo(){
+  const r=P.rack,hh=P.pr0*tshape(K.n).h[K.tier];
+  return {x:r.x,y:r.y,r:r.r,rr:r.r*1.24,h:hh,top:r.y-hh};
+}
+function drawCoolScene(){
+  const k=K,c=kx,g=coolGeo();
+  drawRack(c,g.x,g.y,g.rr);
+  drawSponge(c,g.x,g.top,g.r,g.h,{q:k.q});
+  if(k.cool<1){c.save();c.globalAlpha=(1-k.cool)*.22;c.fillStyle='#ff8a3c';ell(c,g.x,g.top,g.r*.96,g.r*CSY*.96);c.fill();c.restore()}
+  const pw=Math.min(240,LAY.W*.6);
+  pill(c,g.x,g.y+g.rr*1.06+12,pw,18,k.cool,lin(c,g.x-pw/2,0,g.x+pw/2,0,[0,'#ff7a45',1,'#7fd9ff']),'Остыло '+Math.round(k.cool*100)+'%');
+  if(k.cool<.05)caption(c,g.x,g.top-g.r*CSY-18,'Жми «Помахать»',cl(12*LAY.U,11,15),.9+.1*Math.sin(k.t*4));
+}
+function glazeP(i,p){const n=K.n,j=n-1-i;return cl((p-j*.18)/(1-(n-1)*.18),0,1)}
+/* ярус i на подставке: корж, а при глазировке сверху — ярус из редактора, открытый на долю u */
+function drawTier(i,L,glz,dy,sq){
+  const k=K,c=kx,T=L.tiers[i],q=k.layers[i]?k.layers[i].q:'gold',fl=glz?glz.flavor:k.glz.flavor;
+  if(i>0&&!dy)blit(c,cakeImg(L,fl,'s'+i));
+  c.save();
+  if(dy)c.translate(0,dy);
+  if(sq&&sq!==1){c.translate(L.cx,T.y+T.h);c.scale(1+(1-sq)*.5,sq);c.translate(-L.cx,-(T.y+T.h))}
+  drawSponge(c,L.cx,T.y,T.r,T.h,{q:q});
+  if(glz)drawGlazed(c,L,i,glz.flavor,glazeP(i,glz.p));
+  c.restore();
+}
+function drawStackScene(){
+  const k=K,c=kx,L=P.cake,ph=k.phase,top=L.tiers[L.n-1];
+  blit(c,cakeImg(L,k.glz.flavor,'plate'));
+  const glz=(ph==='glaze'||ph==='done')?k.glz:null,placed=ph==='assemble'?k.placed:k.n;
+  for(let i=0;i<placed;i++)drawTier(i,L,glz,0,1);
+  if(ph==='assemble'&&k.placed<k.n){
+    const i=k.placed,T=L.tiers[i],hov=Math.max(L.R*.35,Math.min(L.R*.9,T.y-T.r*CSY-LAY.st-24));
+    let off=hov+Math.sin(k.t*3)*L.R*.03,sq=1;
+    if(k.drop){const u=cl(k.drop.t/.55,0,1);off=(1-u*u)*hov;if(u>.82)sq=1-.07*Math.sin((u-.82)/.18*Math.PI)}
+    else{c.save();c.strokeStyle='rgba(255,255,255,.7)';c.setLineDash([6,5]);c.lineWidth=2;ell(c,L.cx,T.y+T.h,T.r,T.r*CSY);c.stroke();c.restore()}
+    if(off>2)softShadow(c,L.cx,T.y+T.h,T.r*1.03,T.r*CSY*1.02,.42*(1-cl(off/hov,0,1)*.65));
+    drawTier(i,L,null,-off,sq);
+    if(!k.drop&&k.placed===0)caption(c,L.cx,L.bottom+16,k.n>1?'Ставь самый большой':'Ставь на подставку',cl(12*LAY.U,11,15));
+  }
+  if(ph==='glaze'){
+    const gz=k.glz,col=flavCol(gz.flavor),js=L.R*.26,tx=L.cx+top.r*.06,ty=top.y;
+    const tip={x:tx,y:ty-top.r*.95-js*.4};
+    drawJug(c,tip.x,tip.y,js,col,gz.pouring?-.2:-.55+Math.sin(k.t*2)*.03);
+    if(gz.pouring&&gz.p<1){
+      c.save();c.lineCap='round';c.strokeStyle=col;c.lineWidth=Math.max(3,js*.2);
+      c.beginPath();c.moveTo(tip.x,tip.y);c.quadraticCurveTo(tip.x+Math.sin(k.t*8)*js*.1,(tip.y+ty)/2,tx,ty);c.stroke();
+      c.strokeStyle='rgba(255,255,255,.35)';c.lineWidth=Math.max(1,js*.05);c.beginPath();c.moveTo(tip.x-js*.04,tip.y);c.lineTo(tx-js*.04,ty);c.stroke();c.restore();
+    }
+    pill(c,L.cx,L.bottom+16,Math.min(240,LAY.W*.6),16,gz.p,col,'Глазурь '+Math.round(gz.p*100)+'%');
+  }
+  if(ph==='done'){
+    caption(c,L.cx,L.top-22,'Торт готов!',cl(17*LAY.U,14,22));
+  }
+}
+function drawParts(){
+  const c=kx,ps=K.parts;
+  for(let i=0;i<ps.length;i++){
+    const q=ps[i],a=1-q.age/q.life;
+    if(q.k==='star'){
+      c.save();c.globalAlpha=Math.min(1,a*1.6);c.translate(q.x,q.y);c.rotate(q.age*3);c.fillStyle=q.col;
+      const r=q.r*(1.5+Math.sin(q.age*14)*.4);c.beginPath();
+      for(let j=0;j<8;j++){const rd=j%2?r*.35:r,an=j*Math.PI/4;c.lineTo(Math.cos(an)*rd,Math.sin(an)*rd)}
+      c.closePath();c.fill();c.restore();
+    }else if(q.k==='puff'){
+      if(!q._p){const m=/rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)/.exec(q.col);q._p=m?[m[1],m[2],m[3],+m[4]]:[255,255,255,.5]}
+      const rr1=q.r*(1+q.age*.9),a2=a*q._p[3],cc=q._p[0]+','+q._p[1]+','+q._p[2],gr=c.createRadialGradient(q.x,q.y,0,q.x,q.y,rr1);
+      gr.addColorStop(0,'rgba('+cc+','+a2+')');gr.addColorStop(1,'rgba('+cc+',0)');
+      c.fillStyle=gr;c.beginPath();c.arc(q.x,q.y,rr1,0,TAU);c.fill();
+    }else{
+      c.globalAlpha=Math.min(1,a*1.8);c.fillStyle=q.col;ell(c,q.x,q.y,q.r,q.r);c.fill();c.globalAlpha=1;
+    }
+  }
+}
+function render(){
+  const k=K,c=kx,W=LAY.W,H=LAY.H,d=LAY.dpr;
+  if(!k||!W||!H||!P.shelf)return;
+  c.setTransform(d,0,0,d,0,0);
+  if(bgC.key!==bgKey())buildBg();
+  c.drawImage(bgC.cv,0,0,W,H);
+  const ph=k.phase;
+  if(P.note.show&&(ph==='pick'||TIER_PH.indexOf(ph)>=0))drawNote();
+  if(ph==='pick'){drawPickScene();c.fillStyle='rgba(12,5,10,.4)';c.fillRect(0,0,W,H)}
+  else if(ph==='ing')drawIngScene();
+  else if(ph==='mix')drawMixScene();
+  else if(ph==='pan')drawPanScene();
+  else if(ph==='oven')drawOvenScene();
+  else if(ph==='cool')drawCoolScene();
+  else drawStackScene();
+  drawParts();
+  c.globalAlpha=1;
+}
+
+/* ---- наружу ---- */
+openKitchen=openK;
+kitchenEsc=function(){if(!K)return;if(K.leaving)cancelLeave();else requestClose()};
+window.__kitchen={get phase(){return K?K.phase:null},get state(){return K},go:function(p){if(K)go(p)},start:function(n){if(!K)return;selectCard(n);startGame()},open:openK};
+
+})();
+document.getElementById('bakeBtn').addEventListener('click',()=>{if(introUp()||greetUp()||melonUp()||anyOverlayOpen())return;openKitchen()});
 applyThemeDOM();
 })();
 </script>
